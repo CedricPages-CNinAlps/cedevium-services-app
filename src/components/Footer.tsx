@@ -1,10 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { footerData, colors } from '../data';
 
 const Footer: React.FC = () => {
+  const getIconComponent = (iconName: string) => {
+    switch(iconName) {
+      case 'Mail': return Mail;
+      case 'Phone': return Phone;
+      case 'MapPin': return MapPin;
+      default: return Mail;
+    }
+  };
   return (
-    <footer className="bg-blue-night text-white py-8">
+    <footer className={`bg-${colors.primary.blue} text-white py-8`}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
@@ -14,13 +23,13 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-orange rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">CS</span>
+              <div className={`w-10 h-10 bg-${colors.primary.orange} rounded-lg flex items-center justify-center`}>
+                <span className="text-white font-bold text-xl">{footerData.company.logo}</span>
               </div>
-              <span className="text-xl font-bold">Cedevium Services</span>
+              <span className="text-xl font-bold">{footerData.company.name}</span>
             </div>
             <p className="text-gray-300 mb-4">
-              Votre partenaire de confiance pour le développement web, les services entreprises et la conception 3D.
+              {footerData.company.description}
             </p>
           </motion.div>
 
@@ -30,12 +39,15 @@ const Footer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className="text-lg font-semibold mb-4 text-orange">Liens Rapides</h3>
+            <h3 className={`text-lg font-semibold mb-4 text-${colors.primary.orange}`}>{footerData.quickLinks.title}</h3>
             <ul className="space-y-2">
-              <li><a href="#home" className="text-gray-300 hover:text-orange transition-colors">Accueil</a></li>
-              <li><a href="#services" className="text-gray-300 hover:text-orange transition-colors">Services</a></li>
-              <li><a href="#activities" className="text-gray-300 hover:text-orange transition-colors">Activités</a></li>
-              <li><a href="#contact" className="text-gray-300 hover:text-orange transition-colors">Contact</a></li>
+              {footerData.quickLinks.links.map((link, index) => (
+                <li key={index}>
+                  <a href={link.href} className={`text-gray-300 hover:text-${colors.primary.orange} transition-colors`}>
+                    {link.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </motion.div>
 
@@ -45,20 +57,17 @@ const Footer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h3 className="text-lg font-semibold mb-4 text-orange">Contact</h3>
+            <h3 className={`text-lg font-semibold mb-4 text-${colors.primary.orange}`}>{footerData.contact.title}</h3>
             <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Mail size={18} className="text-orange" />
-                <span className="text-gray-300">contact@cedevium-services.fr</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone size={18} className="text-orange" />
-                <span className="text-gray-300">+33 6 00 00 00 00</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin size={18} className="text-orange" />
-                <span className="text-gray-300">France</span>
-              </div>
+              {footerData.contact.info.map((info, index) => {
+                const IconComponent = getIconComponent(info.icon);
+                return (
+                  <div key={index} className="flex items-center space-x-2">
+                    <IconComponent size={18} className={`text-${colors.primary.orange}`} />
+                    <span className="text-gray-300">{info.content}</span>
+                  </div>
+                );
+              })}
             </div>
           </motion.div>
         </div>
@@ -71,7 +80,7 @@ const Footer: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <p className="text-gray-300">
-            © 2024 Cedevium Services. Développé par Cedevium Services
+            {footerData.copyright}
           </p>
         </motion.div>
       </div>

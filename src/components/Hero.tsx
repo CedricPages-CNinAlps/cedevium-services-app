@@ -1,44 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowRight } from 'lucide-react';
+import { heroData, colors, images } from '../data';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   
-  const slides = [
-    {
-      title: "Développement Web & SaaS",
-      subtitle: "Des solutions sur mesure pour votre entreprise",
-      description: "Création de sites internet, applications SaaS et automatisation de vos processus documentaires",
-      cta: "Découvrir nos services"
-    },
-    {
-      title: "Services Entreprises",
-      subtitle: "Votre partenaire pour le développement",
-      description: "Aide divers sur vos activités, communication, services web et animation d'événements",
-      cta: "En savoir plus"
-    },
-    {
-      title: "Conception 3D",
-      subtitle: "L'aménagement professionnel sans limite",
-      description: "Conception 3D pour professionnels et particuliers (cuisine, dressing, etc.) sans activité de montage",
-      cta: "Explorer nos projets"
-    }
-  ];
-
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+      setCurrentSlide((prev) => (prev + 1) % heroData.slides.length);
+    }, heroData.slider.autoPlayInterval);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [heroData.slides.length]);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => (prev + 1) % heroData.slides.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrentSlide((prev) => (prev - 1 + heroData.slides.length) % heroData.slides.length);
   };
 
   return (
@@ -47,10 +27,10 @@ const Hero: React.FC = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/bonhomme-courses.jpg')`,
+          backgroundImage: `url('${images.hero.background}')`,
         }}
       >
-        <div className="absolute inset-0 bg-blue-night/80"></div>
+        <div className={`absolute inset-0 bg-${colors.primary.blue}/80`}></div>
       </div>
 
       {/* Slider Content */}
@@ -70,7 +50,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="text-orange">{slides[currentSlide].title}</span>
+              <span className={`text-${colors.primary.orange}`}>{heroData.slides[currentSlide].title}</span>
             </motion.h1>
             
             <motion.h2 
@@ -79,7 +59,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              {slides[currentSlide].subtitle}
+              {heroData.slides[currentSlide].subtitle}
             </motion.h2>
             
             <motion.p 
@@ -88,18 +68,18 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              {slides[currentSlide].description}
+              {heroData.slides[currentSlide].description}
             </motion.p>
             
             <motion.button
-              className="bg-orange hover:bg-orange/90 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
+              className={`bg-${colors.primary.orange} hover:bg-${colors.primary.orange}/90 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20`}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span>{slides[currentSlide].cta}</span>
+              <span>{heroData.slides[currentSlide].cta}</span>
               <ArrowRight size={20} />
             </motion.button>
           </motion.div>
@@ -115,12 +95,12 @@ const Hero: React.FC = () => {
           </button>
           
           <div className="flex space-x-2">
-            {slides.map((_, index) => (
+            {heroData.slides.map((_, index) => (
               <button
-                key={index}
+                key={heroData.slides[index].id}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? 'bg-orange w-8' : 'bg-white/50'
+                  index === currentSlide ? `bg-${colors.primary.orange} w-8` : 'bg-white/50'
                 }`}
               />
             ))}
