@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/cedevium-services-app/static/css/main.97d7dca4.css",
-    "main.js": "/cedevium-services-app/static/js/main.824b1897.js",
+    "main.css": "/cedevium-services-app/static/css/main.d5e17303.css",
+    "main.js": "/cedevium-services-app/static/js/main.e425ceb1.js",
     "static/js/453.237d5c7f.chunk.js": "/cedevium-services-app/static/js/453.237d5c7f.chunk.js",
     "index.html": "/cedevium-services-app/index.html",
-    "main.97d7dca4.css.map": "/cedevium-services-app/static/css/main.97d7dca4.css.map",
-    "main.824b1897.js.map": "/cedevium-services-app/static/js/main.824b1897.js.map",
+    "main.d5e17303.css.map": "/cedevium-services-app/static/css/main.d5e17303.css.map",
+    "main.e425ceb1.js.map": "/cedevium-services-app/static/js/main.e425ceb1.js.map",
     "453.237d5c7f.chunk.js.map": "/cedevium-services-app/static/js/453.237d5c7f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.97d7dca4.css",
-    "static/js/main.824b1897.js"
+    "static/css/main.d5e17303.css",
+    "static/js/main.e425ceb1.js"
   ]
 }
