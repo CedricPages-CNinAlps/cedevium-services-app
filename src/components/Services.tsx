@@ -24,7 +24,7 @@ const Services: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Nos <span className={`text-${colors.primary.orange}`}>Services</span>
+            Nos <span className="text-orange">Services</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {servicesData.subtitle}
@@ -43,18 +43,18 @@ const Services: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
               >
-                <div className={`w-16 h-16 bg-${colors.primary.orange}/10 rounded-lg flex items-center justify-center mb-4`}>
-                  <IconComponent size={32} className={`text-${colors.primary.orange}`} />
+                <div className="w-16 h-16 bg-orange/10 rounded-lg flex items-center justify-center mb-4">
+                  <IconComponent size={32} className="text-orange" />
                 </div>
                 
-                <h3 className={`text-xl font-bold mb-3 text-${colors.primary.blue}`}>{service.title}</h3>
+                <h3 className="text-xl font-bold mb-3 text-blue-night">{service.title}</h3>
                 
                 <p className="text-gray-600 mb-4">{service.description}</p>
                 
                 <ul className="space-y-2">
                   {service.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center text-sm text-gray-600">
-                      <div className={`w-2 h-2 bg-${colors.primary.orange} rounded-full mr-2`}></div>
+                      <div className="w-2 h-2 bg-orange rounded-full mr-2"></div>
                       {feature}
                     </li>
                   ))}

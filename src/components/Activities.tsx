@@ -16,13 +16,13 @@ const Activities: React.FC = () => {
   const getColorClasses = (color: string) => {
     switch(color) {
       case 'orange':
-        return `bg-${colors.primary.orange} text-white`;
+        return 'bg-orange text-white';
       case 'blue':
-        return `bg-${colors.primary.blue} text-white`;
+        return 'bg-blue-night text-white';
       case 'purple':
         return 'bg-purple-600 text-white';
       default:
-        return `bg-${colors.primary.orange} text-white`;
+        return 'bg-orange text-white';
     }
   };
 
@@ -37,7 +37,7 @@ const Activities: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Nos <span className={`text-${colors.primary.orange}`}>Activités</span>
+            Nos <span className="text-orange">Activités</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {activitiesData.subtitle}
@@ -71,11 +71,11 @@ const Activities: React.FC = () => {
                   </p>
                   
                   <div className="mb-6">
-                    <h5 className={`font-bold text-lg mb-3 text-${colors.primary.blue}`}>Services inclus :</h5>
+                    <h5 className="font-bold text-lg mb-3 text-blue-night">Services inclus :</h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {activity.services.map((service, serviceIndex) => (
                         <div key={serviceIndex} className="flex items-center space-x-2">
-                          <div className={`w-2 h-2 bg-${colors.primary.orange} rounded-full`}></div>
+                          <div className="w-2 h-2 bg-orange rounded-full"></div>
                           <span className="text-gray-600">{service}</span>
                         </div>
                       ))}
@@ -85,9 +85,9 @@ const Activities: React.FC = () => {
                   <motion.button
                     className={`inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                       activity.color === 'orange' 
-                        ? `bg-${colors.primary.orange} hover:bg-${colors.primary.orange}/90 text-white` 
+                        ? 'bg-orange hover:bg-orange/90 text-white' 
                         : activity.color === 'blue'
-                        ? `bg-${colors.primary.blue} hover:bg-${colors.primary.blue}/90 text-white`
+                        ? 'bg-blue-night hover:bg-blue-night/90 text-white'
                         : 'bg-purple-600 hover:bg-purple-700 text-white'
                     }`}
                     whileHover={{ scale: 1.05 }}

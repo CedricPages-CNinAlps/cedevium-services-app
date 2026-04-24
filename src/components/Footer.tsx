@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
     }
   };
   return (
-    <footer className={`bg-${colors.primary.blue} text-white py-8`}>
+    <footer className={`bg-blue-night text-white py-8`}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center space-x-2 mb-4">
-              <div className={`w-10 h-10 bg-${colors.primary.orange} rounded-lg flex items-center justify-center`}>
+              <div className={`w-10 h-10 bg-orange rounded-lg flex items-center justify-center`}>
                 <span className="text-white font-bold text-xl">{footerData.company.logo}</span>
               </div>
               <span className="text-xl font-bold">{footerData.company.name}</span>
@@ -39,11 +39,11 @@ const Footer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <h3 className={`text-lg font-semibold mb-4 text-${colors.primary.orange}`}>{footerData.quickLinks.title}</h3>
+            <h3 className={`text-lg font-semibold mb-4 text-orange`}>{footerData.quickLinks.title}</h3>
             <ul className="space-y-2">
               {footerData.quickLinks.links.map((link, index) => (
                 <li key={index}>
-                  <a href={link.href} className={`text-gray-300 hover:text-${colors.primary.orange} transition-colors`}>
+                  <a href={link.href} className={`text-gray-300 hover:text-orange transition-colors`}>
                     {link.name}
                   </a>
                 </li>
@@ -57,13 +57,13 @@ const Footer: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h3 className={`text-lg font-semibold mb-4 text-${colors.primary.orange}`}>{footerData.contact.title}</h3>
+            <h3 className={`text-lg font-semibold mb-4 text-orange`}>{footerData.contact.title}</h3>
             <div className="space-y-2">
               {footerData.contact.info.map((info, index) => {
                 const IconComponent = getIconComponent(info.icon);
                 return (
                   <div key={index} className="flex items-center space-x-2">
-                    <IconComponent size={18} className={`text-${colors.primary.orange}`} />
+                    <IconComponent size={18} className={`text-orange`} />
                     <span className="text-gray-300">{info.content}</span>
                   </div>
                 );
