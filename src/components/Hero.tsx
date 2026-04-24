@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowRight } from 'lucide-react';
-import { heroData, colors, images } from '../data';
+import { heroData, images } from '../data';
+import { COLORS } from '../constants/colors';
 
 const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,7 +31,7 @@ const Hero: React.FC = () => {
           backgroundImage: `url('${images.hero.background}')`,
         }}
       >
-        <div className="absolute inset-0 bg-blue-night/80"></div>
+        <div className={COLORS.CLASSES.BG_PRIMARY_DARK}></div>
       </div>
 
       {/* Slider Content */}
@@ -50,7 +51,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="text-orange">{heroData.slides[currentSlide].title}</span>
+              <span className={COLORS.CLASSES.TEXT_ACCENT}>{heroData.slides[currentSlide].title}</span>
             </motion.h1>
             
             <motion.h2 
@@ -72,7 +73,7 @@ const Hero: React.FC = () => {
             </motion.p>
             
             <motion.button
-              className="bg-orange hover:bg-orange/90 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
+              className={`${COLORS.CLASSES.BG_ACCENT} ${COLORS.CLASSES.HOVER_ACCENT_LIGHT} text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20`}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -100,7 +101,7 @@ const Hero: React.FC = () => {
                 key={heroData.slides[index].id}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? 'bg-orange w-8' : 'bg-white/50'
+                  index === currentSlide ? `${COLORS.CLASSES.BG_ACCENT} w-8` : 'bg-white/50'
                 }`}
               />
             ))}
