@@ -2,10 +2,10 @@
 // Changez ces valeurs pour modifier les couleurs sur tout le site
 
 export const COLORS = {
-  // Couleurs principales
+  // Couleurs principales (vous pouvez utiliser des codes hex)
   PRIMARY: {
-    BLUE: 'blue-night',
-    ORANGE: 'orange',
+    BLUE: 'blue-night',           // ou '#1e3a8a' pour un bleu nuit personnalisé
+    ORANGE: 'orange',             // ou '#f97316' pour un orange personnalisé
     WHITE: 'white',
     GRAY: 'gray'
   },
