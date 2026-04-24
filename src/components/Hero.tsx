@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.5 }}
-            className="max-w-4xl mx-auto"
+            className="max-w-4xl mx-auto pb-24"
           >
             <motion.h1 
               className="text-5xl md:text-7xl font-bold mb-4"
@@ -92,7 +92,7 @@ const Hero: React.FC = () => {
             </motion.p>
             
             <motion.button
-              className="bg-orange hover:bg-orange/90 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105"
+              className="bg-orange hover:bg-orange/90 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -106,7 +106,7 @@ const Hero: React.FC = () => {
         </AnimatePresence>
 
         {/* Slider Controls */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-10">
           <button
             onClick={prevSlide}
             className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
