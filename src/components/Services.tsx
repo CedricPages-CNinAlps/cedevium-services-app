@@ -1,0 +1,84 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Code, Cpu, Users, Palette } from 'lucide-react';
+
+const Services: React.FC = () => {
+  const services = [
+    {
+      icon: Code,
+      title: "Développement Web",
+      description: "Création de sites internet modernes et responsive",
+      features: ["Sites vitrine", "Applications web", "E-commerce", "Maintenance"]
+    },
+    {
+      icon: Cpu,
+      title: "SaaS & Automatisation",
+      description: "Plateformes SaaS pour automatiser vos processus",
+      features: ["Génération de documents", "Automatisation", "SaaS sur mesure", "Intégration"]
+    },
+    {
+      icon: Users,
+      title: "Services Entreprises",
+      description: "Accompagnement pour vos projets professionnels",
+      features: ["Communication", "Événements", "Animation", "Conseil"]
+    },
+    {
+      icon: Palette,
+      title: "Conception 3D",
+      description: "Aménagement professionnel sans activité de montage",
+      features: ["Cuisine", "Dressing", "Aménagement", "Visualisation 3D"]
+    }
+  ];
+
+  return (
+    <section id="services" className="py-20 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Nos <span className="text-orange">Services</span>
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Des solutions complètes pour répondre à tous vos besoins digitaux et professionnels
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {services.map((service, index) => (
+            <motion.div
+              key={service.title}
+              className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -10 }}
+            >
+              <div className="w-16 h-16 bg-orange/10 rounded-lg flex items-center justify-center mb-4">
+                <service.icon size={32} className="text-orange" />
+              </div>
+              
+              <h3 className="text-xl font-bold mb-3 text-blue-night">{service.title}</h3>
+              
+              <p className="text-gray-600 mb-4">{service.description}</p>
+              
+              <ul className="space-y-2">
+                {service.features.map((feature, featureIndex) => (
+                  <li key={featureIndex} className="flex items-center text-sm text-gray-600">
+                    <div className="w-2 h-2 bg-orange rounded-full mr-2"></div>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Services;
