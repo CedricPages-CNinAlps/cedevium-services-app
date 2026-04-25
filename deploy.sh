@@ -35,16 +35,34 @@ git commit -m "$commit_message"
 echo "🔄 Push sur master..."
 git push origin master
 
-if [ $? -eq 0 ]; then
-    echo "✅ Push réussi !"
-    echo "🌐 Le workflow GitHub Actions va se déclencher automatiquement"
-    echo "⏱️  Votre site sera disponible dans 1-2 minutes sur :"
-    echo "🔗 https://cedricpages-cninalps.github.io/cedevium-services-app"
-    echo ""
-    echo "📊 Suivez le déploiement dans l'onglet 'Actions' de votre repository GitHub"
-else
-    echo "❌ Erreur: Le push a échoué"
+if [ $? -ne 0 ]; then
+    echo "❌ Erreur: Le push sur master a échoué"
     exit 1
 fi
 
-echo "🎉 Déploiement lancé avec succès !"
+echo "✅ Push sur master réussi !"
+
+# Build du projet
+echo "🔨 Build du projet..."
+yarn build
+
+if [ $? -ne 0 ]; then
+    echo "❌ Erreur: Le build a échoué"
+    exit 1
+fi
+
+# Déployer sur gh-pages
+echo "🚀 Déploiement sur gh-pages..."
+git subtree push --prefix build origin gh-pages --force
+
+if [ $? -eq 0 ]; then
+    echo "✅ Déploiement réussi !"
+    echo "🌐 Votre site est disponible sur :"
+    echo "🔗 https://cedricpages-cninalps.github.io/cedevium-services-app"
+    echo "⏱️  Attendez 1-2 minutes pour la propagation GitHub Pages"
+else
+    echo "❌ Erreur: Le déploiement a échoué"
+    exit 1
+fi
+
+echo "🎉 Déploiement terminé avec succès !"
