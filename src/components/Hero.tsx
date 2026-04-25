@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="text-accent">{heroData.slides[currentSlide].title}</span>
+              <span className="text-white">{heroData.slides[currentSlide].title}</span>
             </motion.h1>
             
             <motion.h2 
@@ -72,7 +72,7 @@ const Hero: React.FC = () => {
             </motion.p>
             
             <motion.button
-              className="bg-accent hover-accent-light text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
+              className="bg-blue-night hover-blue-night/80 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -100,7 +100,7 @@ const Hero: React.FC = () => {
                 key={heroData.slides[index].id}
                 onClick={() => setCurrentSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? 'bg-accent w-8' : 'bg-white/50'
+                  index === currentSlide ? 'bg-blue-night w-8' : 'bg-white/50'
                 }`}
               />
             ))}

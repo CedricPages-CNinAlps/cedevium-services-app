@@ -21,7 +21,7 @@ export const colors = {
 // Images du site
 export const images = {
   hero: {
-    background: '/bonhomme-courses.jpg',
+    background: '/cedevium-services-app/bonhomme-courses.jpg',
     logo: '/logo192.png',
     favicon: '/favicon.ico'
   },
@@ -129,7 +129,7 @@ export const activitiesData = {
         "Événements de groupe et animation"
       ],
       color: "blue",
-      icon: "Briefcase"
+      icon: "Network"
     },
     {
       id: 3,
@@ -142,7 +142,7 @@ export const activitiesData = {
         "Conception de dressing",
         "Projets pour particuliers et professionnels"
       ],
-      color: "purple",
+      color: "orange",
       icon: "Palette"
     }
   ]

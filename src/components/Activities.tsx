@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code, Briefcase, Palette, ArrowRight } from 'lucide-react';
+import { Code, Briefcase, Palette, Network, ArrowRight } from 'lucide-react';
 import { activitiesData } from '../data';
 
 const Activities: React.FC = () => {
@@ -9,6 +9,7 @@ const Activities: React.FC = () => {
       case 'Code': return Code;
       case 'Briefcase': return Briefcase;
       case 'Palette': return Palette;
+      case 'Network': return Network;
       default: return Code;
     }
   };
