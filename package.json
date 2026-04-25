@@ -27,9 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "./deploy.sh",
-    "deploy-simple": "yarn build && git subtree push --prefix build origin gh-pages",
-    "deploy-full": "git add . && git commit -m \"Update project\" && yarn deploy-simple && git push origin master"
+    "deploy": "./deploy.sh"
   },
   "eslintConfig": {
     "extends": [
