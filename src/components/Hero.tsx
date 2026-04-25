@@ -28,9 +28,10 @@ const Hero: React.FC = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('${images.hero.background}')`,
+          backgroundColor: 'rgba(30, 26, 52, 0.8)',
         }}
       >
-        <div className="bg-primary-dark" style={{ backgroundColor: 'rgba(30, 26, 52, 0.8)' }}></div>
+        <div className="absolute inset-0 bg-primary-dark"></div>
       </div>
 
       {/* Slider Content */}
