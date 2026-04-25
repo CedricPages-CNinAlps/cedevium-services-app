@@ -30,7 +30,7 @@ const Hero: React.FC = () => {
           backgroundImage: `url('${images.hero.background}')`,
         }}
       >
-        <div className="bg-primary-dark"></div>
+        <div className="bg-primary-dark" style={{ backgroundColor: 'rgba(30, 26, 52, 0.8)' }}></div>
       </div>
 
       {/* Slider Content */}
