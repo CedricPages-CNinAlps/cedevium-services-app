@@ -53,7 +53,7 @@ fi
 
 # Déployer sur gh-pages
 echo "🚀 Déploiement sur gh-pages..."
-git subtree push --prefix build origin gh-pages --force
+git subtree push --prefix build origin gh-pages
 
 if [ $? -eq 0 ]; then
     echo "✅ Déploiement réussi !"
