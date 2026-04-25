@@ -1,33 +1,33 @@
 #!/bin/bash
 
-echo "🚀 Déploiement automatique sur GitHub Pages..."
+echo "🚀 Déploiement simple et fiable..."
 
 # Vérifier si on est sur la branche master
 if [ "$(git branch --show-current)" != "master" ]; then
-    echo "❌ Erreur: Vous devez être sur la branche master pour déployer"
+    echo "❌ Erreur: Vous devez être sur la branche master"
     echo "📋 Commande: git checkout master"
     exit 1
 fi
 
-# Ajouter tous les fichiers
-echo "📋 Ajout des fichiers modifiés..."
-git add .
-
-# Vérifier s'il y a des changements à commit
+# Vérifier s'il y a des changements
 if [ -z "$(git status --porcelain)" ]; then
     echo "ℹ️  Aucun changement à déployer"
     exit 0
 fi
 
 # Demander le message de commit
-echo "💬 Entrez votre message de commit (ou laissez vide pour le message par défaut):"
+echo "💬 Entrez votre message de commit:"
 read -r commit_message
 
 if [ -z "$commit_message" ]; then
     commit_message="Mise à jour du site"
 fi
 
-# Commiter les changements
+# Ajouter les fichiers
+echo "📋 Ajout des fichiers..."
+git add .
+
+# Commiter
 echo "📝 Commit des changements..."
 git commit -m "$commit_message"
 
@@ -42,7 +42,7 @@ fi
 
 echo "✅ Push sur master réussi !"
 
-# Build du projet
+# Build
 echo "🔨 Build du projet..."
 yarn build
 
