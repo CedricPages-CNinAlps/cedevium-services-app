@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X, Code, Briefcase, Home, Mail } from 'lucide-react';
+import { Menu, X, Code, Briefcase, Home, Mail, Gamepad2 } from 'lucide-react';
 import { headerData } from '../data';
 
 const Header: React.FC = () => {
@@ -13,6 +13,7 @@ const Header: React.FC = () => {
       case 'Home': return Home;
       case 'Briefcase': return Briefcase;
       case 'Code': return Code;
+      case 'Gamepad2': return Gamepad2;
       case 'Mail': return Mail;
       default: return Home;
     }

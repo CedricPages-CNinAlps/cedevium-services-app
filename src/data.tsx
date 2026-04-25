@@ -248,6 +248,7 @@ export const headerData = {
     { name: 'Accueil', icon: 'Home', href: '#home' },
     { name: 'Services', icon: 'Briefcase', href: '#services' },
     { name: 'Activités', icon: 'Code', href: '#activities' },
+    { name: 'Jeux', icon: 'Gamepad2', href: '#games' },
     { name: 'Contact', icon: 'Mail', href: '#contact' }
   ]
 };
@@ -265,6 +266,7 @@ export const footerData = {
       { name: 'Accueil', href: '#home' },
       { name: 'Services', href: '#services' },
       { name: 'Activités', href: '#activities' },
+      { name: 'Jeux', href: '#games' },
       { name: 'Contact', href: '#contact' }
     ]
   },
@@ -277,6 +279,122 @@ export const footerData = {
     ]
   },
   copyright: "© 2024 Cedevium Services. Développé par Cedevium Services"
+};
+
+// Données du composant Games
+export const gamesData = {
+  title: "Nos Jeux",
+  subtitle: "Nos jeux d'équipe que nous vous permettrons une cohésion d'équipe ou non ! Travailler vos esprits de déduction, de réflexion et d'observations.",
+  games: [
+    {
+      id: 1,
+      name: "Le loup garou",
+      emoji: "🐺",
+      description: "Jeu de déduction et de bluff où les villageois doivent démasquer le loup-garou parmi eux.",
+      difficulty: "Moyen",
+      duration: "30-60 min",
+      players: "6-12 joueurs"
+    },
+    {
+      id: 2,
+      name: "Two room and a boom",
+      emoji: "💣",
+      description: "Jeu de communication et de déduction où les équipes doivent désamorser une bombe.",
+      difficulty: "Facile",
+      duration: "20-40 min",
+      players: "4-8 joueurs"
+    },
+    {
+      id: 3,
+      name: "Benind",
+      emoji: "🎭",
+      description: "Jeu de rôle et d'improvisation où les joueurs incarnent des personnages dans des situations amusantes.",
+      difficulty: "Facile",
+      duration: "15-30 min",
+      players: "3-10 joueurs"
+    },
+    {
+      id: 4,
+      name: "Hantise",
+      emoji: "👻",
+      description: "Jeu d'enquête paranormale où les joueurs doivent résoudre des mystères surnaturels.",
+      difficulty: "Difficile",
+      duration: "45-90 min",
+      players: "4-8 joueurs"
+    },
+    {
+      id: 5,
+      name: "Unlock",
+      emoji: "🔓",
+      description: "Jeu d'évasion où les équipes doivent résoudre des énigmes pour déverrouiller la sortie.",
+      difficulty: "Moyen",
+      duration: "60-90 min",
+      players: "2-6 joueurs"
+    },
+    {
+      id: 6,
+      name: "Murder party",
+      emoji: "🔪",
+      description: "Jeu d'investigation où les participants doivent résoudre un meurtre mystérieux.",
+      difficulty: "Difficile",
+      duration: "90-120 min",
+      players: "6-12 joueurs"
+    },
+    {
+      id: 7,
+      name: "Ricochec Robots",
+      emoji: "🤖",
+      description: "Jeu de stratégie et de programmation où les robots doivent atteindre leur objectif.",
+      difficulty: "Moyen",
+      duration: "30-45 min",
+      players: "2-4 joueurs"
+    },
+    {
+      id: 8,
+      name: "Swoobee",
+      emoji: "🎯",
+      description: "Jeu d'adresse et de précision où les joueurs doivent viser des cibles.",
+      difficulty: "Facile",
+      duration: "20-30 min",
+      players: "2-6 joueurs"
+    },
+    {
+      id: 9,
+      name: "Pock!",
+      emoji: "🎪",
+      description: "Jeu de rapidité et de réflexes où les joueurs doivent être les plus vifs.",
+      difficulty: "Facile",
+      duration: "15-25 min",
+      players: "3-8 joueurs"
+    },
+    {
+      id: 10,
+      name: "Molsky",
+      emoji: "🦉",
+      description: "Jeu d'observation et de mémoire où les joueurs doivent repérer les différences.",
+      difficulty: "Moyen",
+      duration: "25-35 min",
+      players: "2-6 joueurs"
+    }
+  ],
+  benefits: [
+    {
+      title: "Cohésion d'équipe",
+      description: "Renforcez les liens entre vos collaborateurs grâce à des expériences partagées"
+    },
+    {
+      title: "Esprit de déduction",
+      description: "Développez la logique et la capacité d'analyse de vos équipes"
+    },
+    {
+      title: "Réflexion rapide",
+      description: "Stimulez la prise de décision et la réactivité dans des situations variées"
+    },
+    {
+      title: "Observation attentive",
+      description: "Améliorez la capacité à repérer les détails et à analyser les situations"
+    }
+  ]
 };
 
 // Configuration du site
@@ -293,6 +411,7 @@ export default {
   heroData,
   servicesData,
   activitiesData,
+  gamesData,
   contactData,
   headerData,
   footerData,
