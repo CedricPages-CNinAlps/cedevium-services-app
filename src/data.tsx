@@ -21,7 +21,7 @@ export const colors = {
 // Images du site
 export const images = {
   hero: {
-    background: '/bonhomme-courses.jpg',
+    background: './bonhomme-courses.jpg',
     logo: '/logo192.png',
     favicon: '/favicon.ico'
   },

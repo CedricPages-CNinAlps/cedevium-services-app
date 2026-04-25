@@ -17,6 +17,14 @@ if [ -n "$(git status --porcelain)" ]; then
     git commit -m "Auto-commit before deployment"
 fi
 
+echo "🔄 Push des commits sur master..."
+git push origin master
+
+if [ $? -ne 0 ]; then
+    echo "❌ Erreur: Le push sur master a échoué"
+    exit 1
+fi
+
 echo "🔨 Build du projet..."
 yarn build
 
@@ -58,8 +66,5 @@ else
         exit 1
     fi
 fi
-
-echo "🔄 Synchronisation de la branche master..."
-git push origin master
 
 echo "🎉 Déploiement terminé avec succès !"
