@@ -1,0 +1,116 @@
+/* Variables CSS globales pour les couleurs du site */
+/* Changez ces valeurs pour modifier les couleurs sur tout le site */
+
+:root {
+  /* Couleurs principales */
+  --color-primary: #1E1A34;        /* Bleu nuit */
+  --color-accent: #DC582A;         /* Orange */
+  --color-white: #ffffff;
+  --color-gray: #6b7280;
+  
+  /* Couleurs sémantiques */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* Couleurs avec opacité */
+  --color-accent-light: rgba(220, 88, 42, 0.1);
+  --color-accent-hover: rgba(220, 88, 42, 0.2);
+  --color-primary-dark: rgba(30, 26, 52, 0.8);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(to right, #1E1A34, #DC582A);
+  --gradient-secondary: linear-gradient(to right, #DC582A, #1E1A34);
+}
+
+/* Classes utilitaires basées sur les variables CSS */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-white {
+  color: var(--color-white);
+}
+
+.text-gray {
+  color: var(--color-gray);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.bg-white {
+  background-color: var(--color-white);
+}
+
+.bg-gray {
+  background-color: var(--color-gray);
+}
+
+.bg-accent-light {
+  background-color: var(--color-accent-light);
+}
+
+.bg-accent-hover {
+  background-color: var(--color-accent-hover);
+}
+
+.bg-primary-dark {
+  background-color: var(--color-primary-dark);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.focus-accent {
+  --tw-ring-color: var(--color-accent);
+}
+
+.focus-primary {
+  --tw-ring-color: var(--color-primary);
+}
+
+/* Classes hover */
+.hover-accent:hover {
+  background-color: var(--color-accent);
+}
+
+.hover-accent-light:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.hover-text-accent:hover {
+  color: var(--color-accent);
+}
+
+.hover-primary:hover {
+  background-color: var(--color-primary);
+}
+
+.hover-primary-light:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Classes pour les éléments avec des points */
+.bullet-accent {
+  background-color: var(--color-accent);
+}
+
+.bullet-primary {
+  background-color: var(--color-primary);
+}

@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Briefcase, Palette, ArrowRight } from 'lucide-react';
 import { activitiesData } from '../data';
-import { COLORS } from '../constants/colors';
 
 const Activities: React.FC = () => {
   const getIconComponent = (iconName: string) => {
@@ -17,13 +16,13 @@ const Activities: React.FC = () => {
   const getColorClasses = (color: string) => {
     switch(color) {
       case 'orange':
-        return `${COLORS.CLASSES.BG_ACCENT} text-white`;
+        return 'bg-accent text-white';
       case 'blue':
-        return `${COLORS.CLASSES.BG_PRIMARY} text-white`;
+        return 'bg-primary text-white';
       case 'purple':
         return 'bg-purple-600 text-white';
       default:
-        return `${COLORS.CLASSES.BG_ACCENT} text-white`;
+        return 'bg-accent text-white';
     }
   };
 
@@ -38,7 +37,7 @@ const Activities: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Nos <span className={COLORS.CLASSES.TEXT_ACCENT}>Activités</span>
+            Nos <span className="text-accent">Activités</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {activitiesData.subtitle}
@@ -72,11 +71,11 @@ const Activities: React.FC = () => {
                   </p>
                   
                   <div className="mb-6">
-                    <h5 className={`font-bold text-lg mb-3 ${COLORS.CLASSES.TEXT_PRIMARY}`}>Services inclus :</h5>
+                    <h5 className="font-bold text-lg mb-3 text-primary">Services inclus :</h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {activity.services.map((service, serviceIndex) => (
                         <div key={serviceIndex} className="flex items-center space-x-2">
-                          <div className={`w-2 h-2 ${COLORS.CLASSES.BG_ACCENT} rounded-full`}></div>
+                          <div className="w-2 h-2 bullet-accent rounded-full"></div>
                           <span className="text-gray-600">{service}</span>
                         </div>
                       ))}
@@ -86,9 +85,9 @@ const Activities: React.FC = () => {
                   <motion.button
                     className={`inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
                       activity.color === 'orange' 
-                        ? `${COLORS.CLASSES.BG_ACCENT} ${COLORS.CLASSES.HOVER_ACCENT_LIGHT} text-white` 
+                        ? 'bg-accent hover-accent-light text-white' 
                         : activity.color === 'blue'
-                        ? `${COLORS.CLASSES.BG_PRIMARY} ${COLORS.CLASSES.HOVER_PRIMARY_LIGHT} text-white`
+                        ? 'bg-primary hover-primary-light text-white'
                         : 'bg-purple-600 hover:bg-purple-700 text-white'
                     }`}
                     whileHover={{ scale: 1.05 }}

@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Cpu, Users, Palette } from 'lucide-react';
 import { servicesData } from '../data';
-import { COLORS } from '../constants/colors';
 
 const Services: React.FC = () => {
   const getIconComponent = (iconName: string) => {
@@ -25,7 +24,7 @@ const Services: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Nos <span className={COLORS.CLASSES.TEXT_ACCENT}>Services</span>
+            Nos <span className="text-accent">Services</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {servicesData.subtitle}
@@ -44,18 +43,18 @@ const Services: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
               >
-                <div className={`w-16 h-16 ${COLORS.CLASSES.BG_ACCENT_LIGHT} rounded-lg flex items-center justify-center mb-4`}>
-                  <IconComponent size={32} className={COLORS.CLASSES.TEXT_ACCENT} />
+                <div className="w-16 h-16 bg-accent-light rounded-lg flex items-center justify-center mb-4">
+                  <IconComponent size={32} className="text-accent" />
                 </div>
                 
-                <h3 className={`text-xl font-bold mb-3 ${COLORS.CLASSES.TEXT_PRIMARY}`}>{service.title}</h3>
+                <h3 className="text-xl font-bold mb-3 text-primary">{service.title}</h3>
                 
                 <p className="text-gray-600 mb-4">{service.description}</p>
                 
                 <ul className="space-y-2">
                   {service.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center text-sm text-gray-600">
-                      <div className={`w-2 h-2 ${COLORS.CLASSES.BG_ACCENT} rounded-full mr-2`}></div>
+                      <div className="w-2 h-2 bullet-accent rounded-full mr-2"></div>
                       {feature}
                     </li>
                   ))}
