@@ -25,10 +25,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "📦 Commit des fichiers de build..."
-git add build/
-git commit -m "Update build for deployment"
-
 echo "🚀 Déploiement sur gh-pages..."
 git subtree push --prefix build origin gh-pages
 
@@ -37,8 +33,30 @@ if [ $? -eq 0 ]; then
     echo "🌐 Site disponible: https://cedricpages-cninalps.github.io/cedevium-services-app"
     echo "⏱️  Attendez 1-2 minutes pour la propagation GitHub Pages"
 else
-    echo "❌ Erreur: Le déploiement a échoué"
-    exit 1
+    echo "⚠️  Erreur de push détectée, tentative de synchronisation..."
+    
+    # Sauvegarder la branche actuelle
+    CURRENT_BRANCH=$(git branch --show-current)
+    
+    # Aller sur gh-pages et synchroniser
+    git checkout gh-pages
+    git pull origin gh-pages
+    
+    # Revenir sur master
+    git checkout $CURRENT_BRANCH
+    
+    # Réessayer le déploiement
+    echo "🔄 Nouvelle tentative de déploiement..."
+    git subtree push --prefix build origin gh-pages
+    
+    if [ $? -eq 0 ]; then
+        echo "✅ Déploiement réussi après synchronisation !"
+        echo "🌐 Site disponible: https://cedricpages-cninalps.github.io/cedevium-services-app"
+        echo "⏱️  Attendez 1-2 minutes pour la propagation GitHub Pages"
+    else
+        echo "❌ Erreur: Le déploiement a échoué même après synchronisation"
+        exit 1
+    fi
 fi
 
 echo "🔄 Synchronisation de la branche master..."
