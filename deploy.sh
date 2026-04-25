@@ -43,26 +43,16 @@ if [ $? -eq 0 ]; then
 else
     echo "⚠️  Erreur de push détectée, tentative de synchronisation..."
     
-    # Sauvegarder la branche actuelle
-    CURRENT_BRANCH=$(git branch --show-current)
-    
-    # Aller sur gh-pages et synchroniser
-    git checkout gh-pages
-    git pull origin gh-pages
-    
-    # Revenir sur master
-    git checkout $CURRENT_BRANCH
-    
-    # Réessayer le déploiement
-    echo "🔄 Nouvelle tentative de déploiement..."
-    git subtree push --prefix build origin gh-pages
+    # Forcer le push avec --force pour écraser gh-pages (car c'est un déploiement)
+    echo "🔄 Force push sur gh-pages (déploiement)..."
+    git subtree push --prefix build origin gh-pages --force
     
     if [ $? -eq 0 ]; then
-        echo "✅ Déploiement réussi après synchronisation !"
+        echo "✅ Déploiement réussi avec force push !"
         echo "🌐 Site disponible: https://cedricpages-cninalps.github.io/cedevium-services-app"
         echo "⏱️  Attendez 1-2 minutes pour la propagation GitHub Pages"
     else
-        echo "❌ Erreur: Le déploiement a échoué même après synchronisation"
+        echo "❌ Erreur: Le déploiement a échoué même avec force push"
         exit 1
     fi
 fi
