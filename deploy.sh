@@ -9,52 +9,42 @@ if [ "$(git branch --show-current)" != "master" ]; then
     exit 1
 fi
 
-# Vérifier s'il y a des changements non commités
-if [ -n "$(git status --porcelain)" ]; then
-    echo "⚠️  Changements non commités détectés"
-    echo "📋 Commit automatique des changements..."
-    git add .
-    git commit -m "Auto-commit before deployment"
+# Ajouter tous les fichiers
+echo "📋 Ajout des fichiers modifiés..."
+git add .
+
+# Vérifier s'il y a des changements à commit
+if [ -z "$(git status --porcelain)" ]; then
+    echo "ℹ️  Aucun changement à déployer"
+    exit 0
 fi
 
-echo "🔄 Push des commits sur master..."
+# Demander le message de commit
+echo "💬 Entrez votre message de commit (ou laissez vide pour le message par défaut):"
+read -r commit_message
+
+if [ -z "$commit_message" ]; then
+    commit_message="Mise à jour du site"
+fi
+
+# Commiter les changements
+echo "📝 Commit des changements..."
+git commit -m "$commit_message"
+
+# Pousser sur master
+echo "🔄 Push sur master..."
 git push origin master
 
-if [ $? -ne 0 ]; then
-    echo "❌ Erreur: Le push sur master a échoué"
-    exit 1
-fi
-
-echo "🔨 Build du projet..."
-yarn build
-
-if [ $? -ne 0 ]; then
-    echo "❌ Erreur: Le build a échoué"
-    exit 1
-fi
-
-echo "🚀 Déploiement sur gh-pages..."
-git subtree push --prefix build origin gh-pages
-
 if [ $? -eq 0 ]; then
-    echo "✅ Déploiement réussi !"
-    echo "🌐 Site disponible: https://cedricpages-cninalps.github.io/cedevium-services-app"
-    echo "⏱️  Attendez 1-2 minutes pour la propagation GitHub Pages"
+    echo "✅ Push réussi !"
+    echo "🌐 Le workflow GitHub Actions va se déclencher automatiquement"
+    echo "⏱️  Votre site sera disponible dans 1-2 minutes sur :"
+    echo "🔗 https://cedricpages-cninalps.github.io/cedevium-services-app"
+    echo ""
+    echo "📊 Suivez le déploiement dans l'onglet 'Actions' de votre repository GitHub"
 else
-    echo "⚠️  Erreur de push détectée, tentative de synchronisation..."
-    
-    # Forcer le push avec --force pour écraser gh-pages (car c'est un déploiement)
-    echo "🔄 Force push sur gh-pages (déploiement)..."
-    git subtree push --prefix build origin gh-pages --force
-    
-    if [ $? -eq 0 ]; then
-        echo "✅ Déploiement réussi avec force push !"
-        echo "🌐 Site disponible: https://cedricpages-cninalps.github.io/cedevium-services-app"
-        echo "⏱️  Attendez 1-2 minutes pour la propagation GitHub Pages"
-    else
-        echo "❌ Erreur: Le déploiement a échoué même avec force push"
-        exit 1
-    fi
+    echo "❌ Erreur: Le push a échoué"
+    exit 1
 fi
 
-echo "🎉 Déploiement terminé avec succès !"
+echo "🎉 Déploiement lancé avec succès !"
