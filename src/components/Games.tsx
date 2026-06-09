@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { gamesData } from '../data';
+import { useAdminData } from '../contexts/AdminDataContext';
 
 const Games: React.FC = () => {
+  const { gamesData } = useAdminData();
   const getColorClasses = (index: number) => {
     const colors = [
       'bg-accent text-white',

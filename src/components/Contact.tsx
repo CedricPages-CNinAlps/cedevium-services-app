@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
-import { contactData } from '../data';
+import { useAdminData } from '../contexts/AdminDataContext';
 
 const Contact: React.FC = () => {
+  const { contactData } = useAdminData();
   const [formData, setFormData] = useState({
     name: '',
     email: '',

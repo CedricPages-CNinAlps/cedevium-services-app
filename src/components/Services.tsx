@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Cpu, Users, Palette } from 'lucide-react';
-import { servicesData } from '../data';
+import { useAdminData } from '../contexts/AdminDataContext';
 
 const Services: React.FC = () => {
+  const { servicesData } = useAdminData();
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
       case 'Code': return Code;

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, Code, Briefcase, Home, Mail, Gamepad2 } from 'lucide-react';
-import { headerData } from '../data';
+import { useAdminData } from '../contexts/AdminDataContext';
 
 const Header: React.FC = () => {
+  const { headerData } = useAdminData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);

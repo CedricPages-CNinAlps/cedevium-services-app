@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowRight } from 'lucide-react';
-import { heroData, images } from '../data';
+import { useAdminData } from '../contexts/AdminDataContext';
 
 const Hero: React.FC = () => {
+  const { heroData, images } = useAdminData();
   const [currentSlide, setCurrentSlide] = useState(0);
   
   useEffect(() => {

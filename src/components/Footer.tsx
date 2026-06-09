@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { footerData } from '../data';
+import { useAdminData } from '../contexts/AdminDataContext';
 
 const Footer: React.FC = () => {
+  const { footerData } = useAdminData();
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
       case 'Mail': return Mail;
