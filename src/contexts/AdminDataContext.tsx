@@ -11,8 +11,16 @@ import {
 } from '../data';
 
 const STORAGE_KEY = 'cedevium-admin-data';
-export const ADMIN_PASSWORD = 'nemmone8338';
+const PASSWORD_KEY = 'cedevium-admin-password';
+const DEFAULT_PASSWORD = 'nemmone8338';
 
+export const getAdminPassword = (): string =>
+  localStorage.getItem(PASSWORD_KEY) || DEFAULT_PASSWORD;
+
+export const setAdminPassword = (password: string): void =>
+  localStorage.setItem(PASSWORD_KEY, password);
+
+// ── Types ──────────────────────────────────────────────────────────────────
 export type HeroData = typeof defaultHeroData;
 export type ServicesData = typeof defaultServicesData;
 export type ActivitiesData = typeof defaultActivitiesData;
@@ -21,6 +29,44 @@ export type ContactData = typeof defaultContactData;
 export type HeaderData = typeof defaultHeaderData;
 export type FooterData = typeof defaultFooterData;
 export type ImagesData = typeof defaultImages;
+
+export interface CustomPage {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  published: boolean;
+  createdAt: string;
+}
+
+export interface EmailConfig {
+  enabled: boolean;
+  serviceId: string;
+  templateId: string;
+  publicKey: string;
+  recipientEmail: string;
+}
+
+export interface LogoConfig {
+  type: 'text' | 'image';
+  imageData: string;
+  imageAlt: string;
+}
+
+// ── Default values ──────────────────────────────────────────────────────────
+const defaultEmailConfig: EmailConfig = {
+  enabled: false,
+  serviceId: '',
+  templateId: '',
+  publicKey: '',
+  recipientEmail: '',
+};
+
+const defaultLogoConfig: LogoConfig = {
+  type: 'text',
+  imageData: '',
+  imageAlt: 'Cedevium Services',
+};
 
 interface AdminState {
   heroData: HeroData;
@@ -31,6 +77,9 @@ interface AdminState {
   headerData: HeaderData;
   footerData: FooterData;
   images: ImagesData;
+  customPages: CustomPage[];
+  emailConfig: EmailConfig;
+  logoConfig: LogoConfig;
 }
 
 interface AdminDataContextType extends AdminState {
@@ -40,6 +89,7 @@ interface AdminDataContextType extends AdminState {
   closeAdmin: () => void;
   login: (password: string) => boolean;
   logout: () => void;
+  changePassword: (currentPwd: string, newPwd: string) => boolean;
   updateHeroData: (data: HeroData) => void;
   updateServicesData: (data: ServicesData) => void;
   updateActivitiesData: (data: ActivitiesData) => void;
@@ -48,9 +98,15 @@ interface AdminDataContextType extends AdminState {
   updateHeaderData: (data: HeaderData) => void;
   updateFooterData: (data: FooterData) => void;
   updateImages: (data: ImagesData) => void;
+  updateEmailConfig: (config: EmailConfig) => void;
+  updateLogoConfig: (config: LogoConfig) => void;
+  addPage: (page: Omit<CustomPage, 'id' | 'createdAt'>) => void;
+  updatePage: (id: string, page: Partial<CustomPage>) => void;
+  deletePage: (id: string) => void;
   resetToDefaults: () => void;
 }
 
+// ── Default state ───────────────────────────────────────────────────────────
 const defaultAdminState: AdminState = {
   heroData: defaultHeroData,
   servicesData: defaultServicesData,
@@ -60,6 +116,9 @@ const defaultAdminState: AdminState = {
   headerData: defaultHeaderData,
   footerData: defaultFooterData,
   images: defaultImages,
+  customPages: [],
+  emailConfig: defaultEmailConfig,
+  logoConfig: defaultLogoConfig,
 };
 
 function deepClone<T>(obj: T): T {
@@ -71,7 +130,12 @@ function loadFromStorage(): AdminState {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      return { ...defaultAdminState, ...parsed };
+      return {
+        ...deepClone(defaultAdminState),
+        ...parsed,
+        emailConfig: { ...defaultEmailConfig, ...(parsed.emailConfig || {}) },
+        logoConfig: { ...defaultLogoConfig, ...(parsed.logoConfig || {}) },
+      };
     }
   } catch {}
   return deepClone(defaultAdminState);
@@ -79,6 +143,7 @@ function loadFromStorage(): AdminState {
 
 const AdminDataContext = createContext<AdminDataContextType | null>(null);
 
+// ── Provider ────────────────────────────────────────────────────────────────
 export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AdminState>(loadFromStorage);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -87,9 +152,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
   }, [data]);
 
   useEffect(() => {
@@ -107,7 +170,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   }
 
   const login = (password: string): boolean => {
-    if (password === ADMIN_PASSWORD) {
+    if (password === getAdminPassword()) {
       setIsAuthenticated(true);
       sessionStorage.setItem('cedevium-admin-auth', 'true');
       return true;
@@ -121,6 +184,32 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     setIsAdminOpen(false);
   };
 
+  const changePassword = (currentPwd: string, newPwd: string): boolean => {
+    if (currentPwd !== getAdminPassword()) return false;
+    setAdminPassword(newPwd);
+    return true;
+  };
+
+  const addPage = (page: Omit<CustomPage, 'id' | 'createdAt'>) => {
+    const newPage: CustomPage = {
+      ...page,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+    };
+    setData(prev => ({ ...prev, customPages: [...prev.customPages, newPage] }));
+  };
+
+  const updatePage = (id: string, updates: Partial<CustomPage>) => {
+    setData(prev => ({
+      ...prev,
+      customPages: prev.customPages.map(p => p.id === id ? { ...p, ...updates } : p),
+    }));
+  };
+
+  const deletePage = (id: string) => {
+    setData(prev => ({ ...prev, customPages: prev.customPages.filter(p => p.id !== id) }));
+  };
+
   return (
     <AdminDataContext.Provider value={{
       ...data,
@@ -130,6 +219,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       closeAdmin: () => setIsAdminOpen(false),
       login,
       logout,
+      changePassword,
       updateHeroData: (v) => update('heroData', v),
       updateServicesData: (v) => update('servicesData', v),
       updateActivitiesData: (v) => update('activitiesData', v),
@@ -138,6 +228,11 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       updateHeaderData: (v) => update('headerData', v),
       updateFooterData: (v) => update('footerData', v),
       updateImages: (v) => update('images', v),
+      updateEmailConfig: (v) => update('emailConfig', v),
+      updateLogoConfig: (v) => update('logoConfig', v),
+      addPage,
+      updatePage,
+      deletePage,
       resetToDefaults: () => {
         setData(deepClone(defaultAdminState));
         localStorage.removeItem(STORAGE_KEY);

@@ -4,7 +4,7 @@ import { Menu, X, Code, Briefcase, Home, Mail, Gamepad2 } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
 
 const Header: React.FC = () => {
-  const { headerData } = useAdminData();
+  const { headerData, logoConfig } = useAdminData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -31,9 +31,13 @@ const Header: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className={`w-10 h-10 bg-accent rounded-lg flex items-center justify-center`}>
-              <span className="text-white font-bold text-xl">{headerData.logo.text}</span>
-            </div>
+            {logoConfig.type === 'image' && logoConfig.imageData ? (
+              <img src={logoConfig.imageData} alt={logoConfig.imageAlt} className="h-10 w-auto object-contain" />
+            ) : (
+              <div className={`w-10 h-10 bg-accent rounded-lg flex items-center justify-center`}>
+                <span className="text-white font-bold text-xl">{headerData.logo.text}</span>
+              </div>
+            )}
             <span className="text-xl font-bold">{headerData.logo.company}</span>
           </motion.div>
 

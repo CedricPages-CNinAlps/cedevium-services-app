@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
 
 const Footer: React.FC = () => {
-  const { footerData } = useAdminData();
+  const { footerData, logoConfig } = useAdminData();
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
       case 'Mail': return Mail;
@@ -24,9 +24,13 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center space-x-2 mb-4">
-              <div className={`w-10 h-10 bg-accent rounded-lg flex items-center justify-center`}>
-                <span className="text-white font-bold text-xl">{footerData.company.logo}</span>
-              </div>
+              {logoConfig.type === 'image' && logoConfig.imageData ? (
+                <img src={logoConfig.imageData} alt={logoConfig.imageAlt} className="h-10 w-auto object-contain" />
+              ) : (
+                <div className={`w-10 h-10 bg-accent rounded-lg flex items-center justify-center`}>
+                  <span className="text-white font-bold text-xl">{footerData.company.logo}</span>
+                </div>
+              )}
               <span className="text-xl font-bold">{footerData.company.name}</span>
             </div>
             <p className="text-gray-300 mb-4">

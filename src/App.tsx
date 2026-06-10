@@ -6,6 +6,7 @@ import Activities from './components/Activities';
 import Games from './components/Games';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import CustomPage from './components/CustomPage';
 import AdminPanel from './admin/AdminPanel';
 import { AdminDataProvider, useAdminData } from './contexts/AdminDataContext';
 
@@ -24,6 +25,18 @@ const AdminTrigger: React.FC = () => {
 };
 
 function AppContent() {
+  const pageSlug = new URLSearchParams(window.location.search).get('page');
+
+  if (pageSlug) {
+    return (
+      <>
+        <CustomPage slug={pageSlug} />
+        <AdminPanel />
+        <AdminTrigger />
+      </>
+    );
+  }
+
   return (
     <div className="App">
       <Header />

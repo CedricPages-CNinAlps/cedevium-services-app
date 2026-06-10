@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { Plus, Trash2 } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
+
+const NAV_ICON_OPTIONS = ['Home', 'Briefcase', 'Code', 'Gamepad2', 'Mail', 'Globe', 'Info', 'Star', 'Phone'];
 
 const NavigationSection: React.FC = () => {
   const { headerData, footerData, updateHeaderData, updateFooterData } = useAdminData();
@@ -17,6 +20,20 @@ const NavigationSection: React.FC = () => {
     }));
   };
 
+  const addNavItem = () => {
+    setLocalHeader((prev: typeof headerData) => ({
+      ...prev,
+      navigation: [...prev.navigation, { name: 'Nouveau lien', icon: 'Globe', href: '#section' }],
+    }));
+  };
+
+  const removeNavItem = (index: number) => {
+    setLocalHeader((prev: typeof headerData) => ({
+      ...prev,
+      navigation: prev.navigation.filter((_: typeof headerData.navigation[0], i: number) => i !== index),
+    }));
+  };
+
   const updateFooterLink = (index: number, field: string, value: string) => {
     setLocalFooter((prev: typeof footerData) => ({
       ...prev,
@@ -25,6 +42,26 @@ const NavigationSection: React.FC = () => {
         links: prev.quickLinks.links.map((link: typeof footerData.quickLinks.links[0], i: number) =>
           i === index ? { ...link, [field]: value } : link
         ),
+      },
+    }));
+  };
+
+  const addFooterLink = () => {
+    setLocalFooter((prev: typeof footerData) => ({
+      ...prev,
+      quickLinks: {
+        ...prev.quickLinks,
+        links: [...prev.quickLinks.links, { name: 'Nouveau lien', href: '#section' }],
+      },
+    }));
+  };
+
+  const removeFooterLink = (index: number) => {
+    setLocalFooter((prev: typeof footerData) => ({
+      ...prev,
+      quickLinks: {
+        ...prev.quickLinks,
+        links: prev.quickLinks.links.filter((_: typeof footerData.quickLinks.links[0], i: number) => i !== index),
       },
     }));
   };
@@ -40,108 +77,78 @@ const NavigationSection: React.FC = () => {
     <div className="space-y-4">
       <SectionCard title="Logo & En-tête">
         <div className="grid grid-cols-2 gap-4">
-          <FormField
-            label="Initiales du logo"
-            value={localHeader.logo.text}
-            onChange={(v) => setLocalHeader((prev: typeof headerData) => ({
-              ...prev,
-              logo: { ...prev.logo, text: v },
-            }))}
-            placeholder="CS"
-          />
-          <FormField
-            label="Nom de l'entreprise"
-            value={localHeader.logo.company}
-            onChange={(v) => setLocalHeader((prev: typeof headerData) => ({
-              ...prev,
-              logo: { ...prev.logo, company: v },
-            }))}
-            placeholder="Cedevium Services"
-          />
+          <FormField label="Initiales du logo" value={localHeader.logo.text}
+            onChange={(v) => setLocalHeader((prev: typeof headerData) => ({ ...prev, logo: { ...prev.logo, text: v } }))}
+            placeholder="CS" />
+          <FormField label="Nom de l'entreprise" value={localHeader.logo.company}
+            onChange={(v) => setLocalHeader((prev: typeof headerData) => ({ ...prev, logo: { ...prev.logo, company: v } }))}
+            placeholder="Cedevium Services" />
         </div>
       </SectionCard>
 
-      <SectionCard title="Liens de navigation">
-        <div className="space-y-4">
+      <SectionCard title={`Liens de navigation (${localHeader.navigation.length})`}>
+        <div className="space-y-3">
           {localHeader.navigation.map((item: typeof headerData.navigation[0], index: number) => (
-            <div key={index} className="grid grid-cols-2 gap-3 border-b border-gray-100 pb-3 last:border-0 last:pb-0">
-              <FormField
-                label="Libellé"
-                value={item.name}
-                onChange={(v) => updateNavItem(index, 'name', v)}
-              />
-              <FormField
-                label="Ancre (href)"
-                value={item.href}
-                onChange={(v) => updateNavItem(index, 'href', v)}
-                placeholder="#section"
-              />
+            <div key={index} className="flex gap-2 items-start border border-gray-100 rounded-lg p-3">
+              <div className="flex-1 grid grid-cols-3 gap-2">
+                <FormField label="Libellé" value={item.name} onChange={(v) => updateNavItem(index, 'name', v)} />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Icône</label>
+                  <select value={item.icon} onChange={(e) => updateNavItem(index, 'icon', e.target.value)}
+                    className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#DC582A]">
+                    {NAV_ICON_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </select>
+                </div>
+                <FormField label="Ancre (href)" value={item.href} onChange={(v) => updateNavItem(index, 'href', v)} placeholder="#section" />
+              </div>
+              <button type="button" onClick={() => removeNavItem(index)}
+                className="mt-6 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0">
+                <Trash2 size={15} />
+              </button>
             </div>
           ))}
+          <button type="button" onClick={addNavItem}
+            className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
+            <Plus size={16} /> Ajouter un lien
+          </button>
         </div>
       </SectionCard>
 
-      <SectionCard title="Footer — Entreprise">
+      <SectionCard title="Footer — Entreprise" defaultOpen={false}>
         <div className="space-y-4">
-          <FormField
-            label="Nom de l'entreprise"
-            value={localFooter.company.name}
-            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
-              ...prev,
-              company: { ...prev.company, name: v },
-            }))}
-          />
-          <FormField
-            label="Initiales du logo"
-            value={localFooter.company.logo}
-            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
-              ...prev,
-              company: { ...prev.company, logo: v },
-            }))}
-          />
-          <FormTextarea
-            label="Description"
-            value={localFooter.company.description}
-            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
-              ...prev,
-              company: { ...prev.company, description: v },
-            }))}
-          />
-          <FormField
-            label="Copyright"
-            value={localFooter.copyright}
-            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
-              ...prev,
-              copyright: v,
-            }))}
-          />
+          <FormField label="Nom de l'entreprise" value={localFooter.company.name}
+            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({ ...prev, company: { ...prev.company, name: v } }))} />
+          <FormField label="Initiales du logo" value={localFooter.company.logo}
+            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({ ...prev, company: { ...prev.company, logo: v } }))} />
+          <FormTextarea label="Description" value={localFooter.company.description}
+            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({ ...prev, company: { ...prev.company, description: v } }))} />
+          <FormField label="Copyright" value={localFooter.copyright}
+            onChange={(v) => setLocalFooter((prev: typeof footerData) => ({ ...prev, copyright: v }))} />
         </div>
       </SectionCard>
 
-      <SectionCard title="Footer — Liens rapides" defaultOpen={false}>
-        <div className="space-y-4">
-          <FormField
-            label="Titre de la colonne"
-            value={localFooter.quickLinks.title}
+      <SectionCard title={`Footer — Liens rapides (${localFooter.quickLinks.links.length})`} defaultOpen={false}>
+        <div className="space-y-3">
+          <FormField label="Titre de la colonne" value={localFooter.quickLinks.title}
             onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
-              ...prev,
-              quickLinks: { ...prev.quickLinks, title: v },
-            }))}
-          />
+              ...prev, quickLinks: { ...prev.quickLinks, title: v },
+            }))} />
           {localFooter.quickLinks.links.map((link: typeof footerData.quickLinks.links[0], index: number) => (
-            <div key={index} className="grid grid-cols-2 gap-3 border-b border-gray-100 pb-3 last:border-0 last:pb-0">
-              <FormField
-                label="Libellé"
-                value={link.name}
-                onChange={(v) => updateFooterLink(index, 'name', v)}
-              />
-              <FormField
-                label="Ancre (href)"
-                value={link.href}
-                onChange={(v) => updateFooterLink(index, 'href', v)}
-              />
+            <div key={index} className="flex gap-2 items-end">
+              <div className="flex-1 grid grid-cols-2 gap-2">
+                <FormField label="Libellé" value={link.name} onChange={(v) => updateFooterLink(index, 'name', v)} />
+                <FormField label="Ancre (href)" value={link.href} onChange={(v) => updateFooterLink(index, 'href', v)} />
+              </div>
+              <button type="button" onClick={() => removeFooterLink(index)}
+                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors mb-0.5">
+                <Trash2 size={15} />
+              </button>
             </div>
           ))}
+          <button type="button" onClick={addFooterLink}
+            className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
+            <Plus size={16} /> Ajouter un lien
+          </button>
         </div>
       </SectionCard>
 

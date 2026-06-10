@@ -43,7 +43,6 @@ const AdminLogin: React.FC = () => {
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setError(''); }}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg pr-12 text-sm focus:outline-none focus:ring-2 focus:border-transparent"
-                style={{ '--tw-ring-color': '#DC582A' } as React.CSSProperties}
                 placeholder="••••••••••••"
                 autoFocus
               />
@@ -70,7 +69,7 @@ const AdminLogin: React.FC = () => {
         </form>
 
         <p className="text-center text-gray-400 text-xs mt-6">
-          Raccourci clavier : <kbd className="bg-gray-100 px-1 rounded">Ctrl</kbd> + <kbd className="bg-gray-100 px-1 rounded">Shift</kbd> + <kbd className="bg-gray-100 px-1 rounded">A</kbd>
+          Raccourci : <kbd className="bg-gray-100 px-1 rounded">Ctrl</kbd> + <kbd className="bg-gray-100 px-1 rounded">Shift</kbd> + <kbd className="bg-gray-100 px-1 rounded">A</kbd>
         </p>
       </div>
     </div>

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { useAdminData } from '../contexts/AdminDataContext';
 
 const Contact: React.FC = () => {
-  const { contactData } = useAdminData();
+  const { contactData, emailConfig } = useAdminData();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,22 +26,32 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simuler l'envoi du formulaire
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-      });
-      
-      // Reset du message de succès après 5 secondes
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 2000);
+
+    if (emailConfig.enabled && emailConfig.serviceId && emailConfig.templateId && emailConfig.publicKey) {
+      try {
+        await emailjs.send(
+          emailConfig.serviceId,
+          emailConfig.templateId,
+          {
+            from_name: formData.name,
+            from_email: formData.email,
+            phone: formData.phone,
+            subject: formData.subject,
+            message: formData.message,
+            reply_to: formData.email,
+            to_email: emailConfig.recipientEmail,
+          },
+          emailConfig.publicKey
+        );
+      } catch (err) {
+        console.error('EmailJS error:', err);
+      }
+    }
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    setTimeout(() => setIsSubmitted(false), 5000);
   };
 
   const getIconComponent = (iconName: string) => {
