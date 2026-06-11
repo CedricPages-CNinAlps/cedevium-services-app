@@ -3,6 +3,40 @@ import { Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { SectionCard } from '../AdminComponents';
 
+type PwdField = 'current' | 'newPwd' | 'confirm';
+
+const inputClass = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#DC582A] pr-10";
+
+interface PasswordInputProps {
+  field: PwdField;
+  label: string;
+  placeholder: string;
+  value: string;
+  visible: boolean;
+  onChange: (field: PwdField, value: string) => void;
+  onToggle: (field: PwdField) => void;
+}
+
+const PasswordInput: React.FC<PasswordInputProps> = ({ field, label, placeholder, value, visible, onChange, onToggle }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+    <div className="relative">
+      <input
+        type={visible ? 'text' : 'password'}
+        value={value}
+        onChange={(e) => onChange(field, e.target.value)}
+        className={inputClass}
+        placeholder={placeholder}
+        autoComplete="new-password"
+      />
+      <button type="button" onClick={() => onToggle(field)}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+        {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+      </button>
+    </div>
+  </div>
+);
+
 const SecuritySection: React.FC = () => {
   const { changePassword } = useAdminData();
   const [form, setForm] = useState({ current: '', newPwd: '', confirm: '' });
@@ -10,8 +44,8 @@ const SecuritySection: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
-  const toggle = (field: 'current' | 'newPwd' | 'confirm') =>
-    setShow(prev => ({ ...prev, [field]: !prev[field] }));
+  const toggle = (field: PwdField) => setShow(prev => ({ ...prev, [field]: !prev[field] }));
+  const handleChange = (field: PwdField, value: string) => setForm(prev => ({ ...prev, [field]: value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,28 +72,6 @@ const SecuritySection: React.FC = () => {
     setForm({ current: '', newPwd: '', confirm: '' });
   };
 
-  const inputClass = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#DC582A] pr-10";
-
-  const PasswordInput = ({ field, label, placeholder }: { field: 'current' | 'newPwd' | 'confirm'; label: string; placeholder: string }) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <div className="relative">
-        <input
-          type={show[field] ? 'text' : 'password'}
-          value={form[field]}
-          onChange={(e) => setForm(prev => ({ ...prev, [field]: e.target.value }))}
-          className={inputClass}
-          placeholder={placeholder}
-          autoComplete="new-password"
-        />
-        <button type="button" onClick={() => toggle(field)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-          {show[field] ? <EyeOff size={16} /> : <Eye size={16} />}
-        </button>
-      </div>
-    </div>
-  );
-
   return (
     <div className="space-y-4 max-w-lg">
       <SectionCard title="Changer le mot de passe administrateur">
@@ -69,9 +81,9 @@ const SecuritySection: React.FC = () => {
             <span>Le mot de passe est stocké localement dans votre navigateur.</span>
           </div>
 
-          <PasswordInput field="current" label="Mot de passe actuel" placeholder="Votre mot de passe actuel" />
-          <PasswordInput field="newPwd" label="Nouveau mot de passe" placeholder="Au moins 8 caractères" />
-          <PasswordInput field="confirm" label="Confirmer le nouveau mot de passe" placeholder="Répétez le nouveau mot de passe" />
+          <PasswordInput field="current" label="Mot de passe actuel" placeholder="Votre mot de passe actuel" value={form.current} visible={show.current} onChange={handleChange} onToggle={toggle} />
+          <PasswordInput field="newPwd" label="Nouveau mot de passe" placeholder="Au moins 8 caractères" value={form.newPwd} visible={show.newPwd} onChange={handleChange} onToggle={toggle} />
+          <PasswordInput field="confirm" label="Confirmer le nouveau mot de passe" placeholder="Répétez le nouveau mot de passe" value={form.confirm} visible={show.confirm} onChange={handleChange} onToggle={toggle} />
 
           {status === 'error' && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">{message}</div>
