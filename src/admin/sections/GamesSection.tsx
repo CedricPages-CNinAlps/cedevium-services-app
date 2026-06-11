@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, FormSelect, SectionCard, SaveButton } from '../AdminComponents';
+import EmojiPicker from '../components/EmojiPicker';
 
 const DIFFICULTY_OPTIONS = [
   { value: 'Facile', label: 'Facile' },
@@ -102,8 +103,7 @@ const GamesSection: React.FC = () => {
                   value={game.name}
                   onChange={(v) => updateGame(index, 'name', v)}
                 />
-                <FormField
-                  label="Emoji"
+                <EmojiPicker
                   value={game.emoji}
                   onChange={(v) => updateGame(index, 'emoji', v)}
                 />
