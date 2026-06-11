@@ -26,27 +26,43 @@ const EmailSection: React.FC = () => {
       setTestMessage('Veuillez remplir le Service ID, Template ID et Public Key avant de tester.');
       return;
     }
+    // Sauvegarder avant le test pour que le formulaire front utilise les mêmes credentials
+    updateEmailConfig(local);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
     setTestStatus('sending');
     setTestMessage('');
+    const testVars = {
+      from_name: 'Test Back Office',
+      from_email: local.recipientEmail || 'test@cedevium.fr',
+      name: 'Client Test',
+      email: local.recipientEmail || 'test@cedevium.fr',
+      telephone: '06 00 00 00 00',
+      title: 'Développement Web & SaaS',
+      subject: 'Test email - Back Office Cedevium',
+      message: 'Ceci est un email de test envoyé depuis le back office de Cedevium Services.',
+      reply_to: local.recipientEmail || 'test@cedevium.fr',
+      to_email: local.recipientEmail || 'test@cedevium.fr',
+      time: new Date().toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short' }),
+    };
     try {
-      await emailjs.send(
-        local.serviceId,
-        local.templateId,
-        {
-          from_name: 'Test Back Office',
-          from_email: local.recipientEmail || 'test@cedevium.fr',
-          subject: 'Test email - Back Office Cedevium',
-          message: 'Ceci est un email de test envoyé depuis le back office de Cedevium Services.',
-          reply_to: local.recipientEmail || 'test@cedevium.fr',
-        },
-        local.publicKey
-      );
-      setTestStatus('success');
-      setTestMessage('Email de test envoyé avec succès ! Vérifiez votre boîte mail.');
+      await emailjs.send(local.serviceId, local.templateId, testVars, local.publicKey);
     } catch (e: any) {
       setTestStatus('error');
-      setTestMessage(`Erreur : ${e?.text || e?.message || 'Vérifiez vos identifiants EmailJS.'}`);
+      setTestMessage(`Erreur (notification) : ${e?.text || e?.message || 'Vérifiez vos identifiants EmailJS.'}`);
+      return;
     }
+    if (local.confirmationTemplateId) {
+      try {
+        await emailjs.send(local.serviceId, local.confirmationTemplateId, testVars, local.publicKey);
+      } catch (e: any) {
+        setTestStatus('error');
+        setTestMessage(`Erreur (confirmation client) : ${e?.text || e?.message || 'Vérifiez le Template ID de confirmation.'}`);
+        return;
+      }
+    }
+    setTestStatus('success');
+    setTestMessage(`Email${local.confirmationTemplateId ? 's' : ''} de test envoyé${local.confirmationTemplateId ? 's' : ''} avec succès ! Vérifiez votre boîte mail.`);
   };
 
   return (
@@ -89,7 +105,8 @@ const EmailSection: React.FC = () => {
             <p>3. Account → copiez votre <strong>Public Key</strong></p>
           </div>
           <FormField label="Service ID" value={local.serviceId} onChange={(v) => update('serviceId', v)} placeholder="service_xxxxxxx" />
-          <FormField label="Template ID" value={local.templateId} onChange={(v) => update('templateId', v)} placeholder="template_xxxxxxx" />
+          <FormField label="Template ID (notification admin)" value={local.templateId} onChange={(v) => update('templateId', v)} placeholder="template_xxxxxxx" />
+          <FormField label="Template ID (confirmation client)" value={local.confirmationTemplateId} onChange={(v) => update('confirmationTemplateId', v)} placeholder="template_xxxxxxx" />
           <FormField label="Public Key" value={local.publicKey} onChange={(v) => update('publicKey', v)} placeholder="xxxxxxxxxxxxxxxxxxxx" />
           <FormField label="Email de réception" value={local.recipientEmail} onChange={(v) => update('recipientEmail', v)} placeholder="contact@cedevium-services.fr" type="email" />
         </div>

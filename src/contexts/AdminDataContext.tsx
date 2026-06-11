@@ -43,6 +43,7 @@ export interface EmailConfig {
   enabled: boolean;
   serviceId: string;
   templateId: string;
+  confirmationTemplateId: string;
   publicKey: string;
   recipientEmail: string;
 }
@@ -58,6 +59,7 @@ const defaultEmailConfig: EmailConfig = {
   enabled: false,
   serviceId: '',
   templateId: '',
+  confirmationTemplateId: '',
   publicKey: '',
   recipientEmail: '',
 };

@@ -15,6 +15,7 @@ const Contact: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -28,23 +29,44 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     if (emailConfig.enabled && emailConfig.serviceId && emailConfig.templateId && emailConfig.publicKey) {
+      const subjectLabel = contactData.form.fields.subject.options.find(o => o.value === formData.subject)?.label ?? formData.subject;
+      const time = new Date().toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short' });
+      const templateVars = {
+        from_name: formData.name,
+        from_email: formData.email,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        telephone: formData.phone,
+        subject: formData.subject,
+        title: subjectLabel,
+        message: formData.message,
+        reply_to: formData.email,
+        to_email: emailConfig.recipientEmail,
+        time,
+      };
+
       try {
-        await emailjs.send(
-          emailConfig.serviceId,
-          emailConfig.templateId,
-          {
-            from_name: formData.name,
-            from_email: formData.email,
-            phone: formData.phone,
-            subject: formData.subject,
-            message: formData.message,
-            reply_to: formData.email,
-            to_email: emailConfig.recipientEmail,
-          },
-          emailConfig.publicKey
-        );
-      } catch (err) {
-        console.error('EmailJS error:', err);
+        await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateVars, emailConfig.publicKey);
+      } catch (err: any) {
+        console.error('EmailJS error (admin):', err);
+        setIsSubmitting(false);
+        setSubmitError("Une erreur est survenue lors de l'envoi. Veuillez réessayer ou nous contacter directement.");
+        setTimeout(() => setSubmitError(''), 6000);
+        return;
+      }
+
+      if (emailConfig.confirmationTemplateId) {
+        try {
+          await emailjs.send(
+            emailConfig.serviceId,
+            emailConfig.confirmationTemplateId,
+            { ...templateVars, to_email: formData.email },
+            emailConfig.publicKey
+          );
+        } catch (err: any) {
+          console.error('EmailJS error (confirmation):', err);
+        }
       }
     }
 
@@ -193,6 +215,12 @@ const Contact: React.FC = () => {
                   placeholder={contactData.form.fields.message.placeholder}
                 />
               </div>
+
+              {submitError && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {submitError}
+                </div>
+              )}
 
               <motion.button
                 type="submit"

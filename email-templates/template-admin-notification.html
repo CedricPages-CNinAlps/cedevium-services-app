@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:o="urn:schemas-microsoft-com:office:office" style="color-scheme:light dark;">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="supported-color-schemes" content="light dark"/>
+  <!--[if gte mso 9]><xml>
+    <o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings>
+  </xml><![endif]-->
+  <title>Nouvelle demande de contact</title>
+  <style>
+    body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+    table,td{mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;}
+
+    @media (prefers-color-scheme:dark){
+      .dm-body  {background-color:#0f0e1a !important;}
+      .dm-card  {background-color:#1a1730 !important;}
+      .dm-inner {background-color:#231f3d !important;}
+      .dm-bl    {border-left-color:#DC582A !important;}
+      .dm-msg   {background-color:#1e1b32 !important;border-color:#2d2a4a !important;}
+      .dm-h     {color:#f1f5f9 !important;}
+      .dm-body-t{color:#cbd5e1 !important;}
+      .dm-muted {color:#64748b !important;}
+    }
+
+    @media only screen and (max-width:620px){
+      .em-wrap{width:100% !important;}
+      .em-pad {padding-left:20px !important;padding-right:20px !important;}
+      .em-h1  {font-size:19px !important;}
+      .em-col {width:100% !important;display:block !important;padding-bottom:14px !important;box-sizing:border-box !important;}
+      .em-btn {display:block !important;width:100% !important;box-sizing:border-box !important;text-align:center !important;}
+    }
+  </style>
+</head>
+<body class="dm-body" style="margin:0;padding:0;background-color:#f0f0f5;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;">
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f0f0f5" class="dm-body" style="background-color:#f0f0f5;">
+  <tr>
+    <td align="center" valign="top" style="padding:32px 12px;">
+      <table class="em-wrap" width="600" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+
+        <!-- ══ HEADER ══ -->
+        <tr>
+          <td bgcolor="#DC582A" align="center" valign="top"
+            style="background-color:#DC582A;border-radius:12px 12px 0 0;padding:36px 40px;text-align:center;mso-padding-alt:36px 40px;">
+            <h1 class="em-h1" style="margin:0 0 8px 0;color:#ffffff;font-size:22px;font-weight:700;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:30px;">
+              Nouvelle demande de contact
+            </h1>
+            <p style="margin:0;color:rgba(255,255,255,0.85);font-size:13px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:20px;">
+              Cedevium Services &mdash; Back Office
+            </p>
+          </td>
+        </tr>
+
+        <!-- ══ BADGE SUJET ══ -->
+        <tr>
+          <td bgcolor="#ffffff" class="dm-card em-pad" align="center"
+            style="background-color:#ffffff;padding:22px 40px 16px;text-align:center;">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td bgcolor="#DC582A" align="center"
+                  style="background-color:#DC582A;border-radius:20px;padding:7px 20px;mso-padding-alt:7px 20px;">
+                  <span style="color:#ffffff;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:'Segoe UI',Helvetica,Arial,sans-serif;">{{title}}</span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ══ COORDONNÉES ══ -->
+        <tr>
+          <td bgcolor="#ffffff" class="dm-card em-pad" style="background-color:#ffffff;padding:0 40px 22px;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td bgcolor="#f6f5ff" class="dm-inner dm-bl"
+                  style="background-color:#f6f5ff;border-left:4px solid #1E1A34;border-radius:10px;padding:18px 22px;mso-padding-alt:18px 22px;">
+                  <p class="dm-muted"
+                    style="margin:0 0 12px 0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:16px;">
+                    Coordonn&eacute;es du contact
+                  </p>
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td class="em-col" width="50%" valign="top"
+                        style="vertical-align:top;padding:0 16px 14px 0;">
+                        <p class="dm-muted"
+                          style="margin:0 0 3px 0;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:15px;">
+                          Nom
+                        </p>
+                        <p class="dm-h"
+                          style="margin:0;font-size:15px;font-weight:700;color:#1E1A34;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:22px;">
+                          {{name}}
+                        </p>
+                      </td>
+                      <td class="em-col" width="50%" valign="top"
+                        style="vertical-align:top;padding-bottom:14px;">
+                        <p class="dm-muted"
+                          style="margin:0 0 3px 0;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:15px;">
+                          Email
+                        </p>
+                        <a href="mailto:{{email}}"
+                          style="font-size:15px;font-weight:700;color:#DC582A;text-decoration:none;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:22px;">
+                          {{email}}
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="em-col" width="50%" valign="top"
+                        style="vertical-align:top;padding-right:16px;">
+                        <p class="dm-muted"
+                          style="margin:0 0 3px 0;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:15px;">
+                          T&eacute;l&eacute;phone
+                        </p>
+                        <p class="dm-h"
+                          style="margin:0;font-size:15px;font-weight:700;color:#1E1A34;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:22px;">
+                          {{telephone}}
+                        </p>
+                      </td>
+                      <td class="em-col" width="50%" valign="top" style="vertical-align:top;">
+                        <p class="dm-muted"
+                          style="margin:0 0 3px 0;font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:15px;">
+                          Re&ccedil;u le
+                        </p>
+                        <p class="dm-body-t"
+                          style="margin:0;font-size:13px;color:#6b7280;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:20px;">
+                          {{time}}
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ══ MESSAGE ══ -->
+        <tr>
+          <td bgcolor="#ffffff" class="dm-card em-pad" style="background-color:#ffffff;padding:0 40px 28px;">
+            <p class="dm-muted"
+              style="margin:0 0 10px 0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:16px;">
+              Message
+            </p>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td bgcolor="#fafafa" class="dm-msg"
+                  style="background-color:#fafafa;border:1px solid #e5e7eb;border-radius:10px;padding:18px 22px;mso-padding-alt:18px 22px;">
+                  <p class="dm-body-t"
+                    style="margin:0;font-size:15px;color:#374151;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:26px;">
+                    {{message}}
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ══ BOUTON ══ -->
+        <tr>
+          <td bgcolor="#ffffff" class="dm-card em-pad" align="center"
+            style="background-color:#ffffff;padding:0 40px 36px;text-align:center;">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td bgcolor="#1E1A34" align="center"
+                  style="background-color:#1E1A34;border-radius:8px;mso-padding-alt:0;">
+                  <a href="mailto:{{email}}" class="em-btn"
+                    style="display:inline-block;background-color:#1E1A34;background:linear-gradient(135deg,#1E1A34,#DC582A);border-radius:8px;color:#ffffff;font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;padding:13px 36px;text-decoration:none;mso-padding-alt:13px 36px;">
+                    &#8629; R&eacute;pondre &agrave; {{name}}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ══ FOOTER ══ -->
+        <tr>
+          <td bgcolor="#1E1A34" align="center"
+            style="background-color:#1E1A34;border-radius:0 0 12px 12px;padding:24px 40px;text-align:center;">
+            <p style="margin:0 0 4px 0;color:#ffffff;font-size:14px;font-weight:600;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:20px;">
+              Cedevium Services
+            </p>
+            <p style="margin:0;color:#6b6b9a;font-size:11px;font-family:'Segoe UI',Helvetica,Arial,sans-serif;mso-line-height-rule:exactly;line-height:17px;">
+              Cet email a &eacute;t&eacute; g&eacute;n&eacute;r&eacute; automatiquement depuis le formulaire de contact.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
