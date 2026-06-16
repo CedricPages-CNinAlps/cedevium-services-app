@@ -80,7 +80,7 @@ const ServicesSection: React.FC = () => {
             <SortableItem key={String(service.id)} id={String(service.id)}>
               {(dragHandle) => (
                 <SectionCard
-                  title={`Service ${index + 1} — ${service.title}`}
+                  title={`Activité ${index + 1} — ${service.title}`}
                   defaultOpen={index === 0}
                   dragHandle={dragHandle}
                 >
@@ -88,7 +88,7 @@ const ServicesSection: React.FC = () => {
                     <div className="flex justify-end">
                       <button type="button" onClick={() => removeService(index)}
                         className="flex items-center gap-1 text-xs text-red-400 hover:text-red-600">
-                        <Trash2 size={14} /> Supprimer ce service
+                        <Trash2 size={14} /> Supprimer cette activité
                       </button>
                     </div>
                     <FormField label="Titre" value={service.title} onChange={(v) => updateService(index, 'title', v)} />
@@ -105,7 +105,7 @@ const ServicesSection: React.FC = () => {
 
       <button type="button" onClick={addService}
         className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
-        <Plus size={18} /> Ajouter un service
+        <Plus size={18} /> Ajouter une activité
       </button>
 
       <div className="flex justify-end pt-2">

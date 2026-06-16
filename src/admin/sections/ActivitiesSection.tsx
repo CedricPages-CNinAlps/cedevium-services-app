@@ -109,16 +109,16 @@ const ActivitiesSection: React.FC = () => {
       {local.activities.map((activity: any, index: number) => (
         <SortableItem key={String(activity.id)} id={String(activity.id)}>
           {(dragHandle) => (
-        <SectionCard key={activity.id} title={`Activité ${index + 1} — ${activity.subtitle}`} defaultOpen={index === 0} dragHandle={dragHandle}>
+        <SectionCard key={activity.id} title={`Service ${index + 1} — ${activity.subtitle}`} defaultOpen={index === 0} dragHandle={dragHandle}>
           <div className="space-y-4">
             <div className="flex justify-end">
               <button type="button" onClick={() => removeActivity(index)}
                 className="flex items-center gap-1 text-xs text-red-400 hover:text-red-600">
-                <Trash2 size={14} /> Supprimer cette activité
+                <Trash2 size={14} /> Supprimer ce service
               </button>
             </div>
 
-            <FormField label="Label (ex: Activité 1)" value={activity.title} onChange={(v) => updateActivity(index, 'title', v)} />
+            <FormField label="Label (ex: Service 1)" value={activity.title} onChange={(v) => updateActivity(index, 'title', v)} />
             <FormField label="Titre principal" value={activity.subtitle} onChange={(v) => updateActivity(index, 'subtitle', v)} />
             <FormTextarea label="Description" value={activity.description} onChange={(v) => updateActivity(index, 'description', v)} rows={4} />
 
@@ -193,7 +193,7 @@ const ActivitiesSection: React.FC = () => {
 
       <button type="button" onClick={addActivity}
         className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
-        <Plus size={18} /> Ajouter une activité
+        <Plus size={18} /> Ajouter un service
       </button>
 
       <div className="flex justify-end pt-2">

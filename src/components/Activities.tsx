@@ -32,7 +32,7 @@ const Activities: React.FC = () => {
   };
 
   return (
-    <section id="activities" className="py-20 bg-white">
+    <section id="services" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <motion.div
           className="text-center mb-16"
