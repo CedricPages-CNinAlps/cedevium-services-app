@@ -8,6 +8,9 @@ import {
   headerData as defaultHeaderData,
   footerData as defaultFooterData,
   images as defaultImages,
+  portfolioData as defaultPortfolioData,
+  trackingConfig as defaultTrackingConfig,
+  PortfolioItem,
 } from '../data';
 
 const STORAGE_KEY = 'cedevium-admin-data';
@@ -29,6 +32,9 @@ export type ContactData = typeof defaultContactData;
 export type HeaderData = typeof defaultHeaderData;
 export type FooterData = typeof defaultFooterData;
 export type ImagesData = typeof defaultImages;
+export type PortfolioData = typeof defaultPortfolioData;
+export type TrackingConfig = typeof defaultTrackingConfig;
+export type { PortfolioItem };
 
 export interface CustomPage {
   id: string;
@@ -55,6 +61,10 @@ export interface LogoConfig {
 }
 
 // ── Default values ──────────────────────────────────────────────────────────
+
+const defaultPortfolioConfig: PortfolioData = defaultPortfolioData;
+const defaultTracking: TrackingConfig = defaultTrackingConfig;
+
 const defaultEmailConfig: EmailConfig = {
   enabled: false,
   serviceId: '',
@@ -82,11 +92,14 @@ interface AdminState {
   customPages: CustomPage[];
   emailConfig: EmailConfig;
   logoConfig: LogoConfig;
+  portfolioData: PortfolioData;
+  trackingConfig: TrackingConfig;
 }
 
 interface AdminDataContextType extends AdminState {
   isAdminOpen: boolean;
   isAuthenticated: boolean;
+  prefilledSubject: string;
   openAdmin: () => void;
   closeAdmin: () => void;
   login: (password: string) => boolean;
@@ -102,6 +115,9 @@ interface AdminDataContextType extends AdminState {
   updateImages: (data: ImagesData) => void;
   updateEmailConfig: (config: EmailConfig) => void;
   updateLogoConfig: (config: LogoConfig) => void;
+  updatePortfolioData: (data: PortfolioData) => void;
+  updateTrackingConfig: (config: TrackingConfig) => void;
+  setPrefilledSubject: (subject: string) => void;
   addPage: (page: Omit<CustomPage, 'id' | 'createdAt'>) => void;
   updatePage: (id: string, page: Partial<CustomPage>) => void;
   deletePage: (id: string) => void;
@@ -121,10 +137,25 @@ const defaultAdminState: AdminState = {
   customPages: [],
   emailConfig: defaultEmailConfig,
   logoConfig: defaultLogoConfig,
+  portfolioData: defaultPortfolioConfig,
+  trackingConfig: defaultTracking,
 };
 
 function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
+}
+
+function migrateActivities(stored: any) {
+  if (!stored?.activitiesData?.activities) return stored?.activitiesData;
+  return {
+    ...defaultActivitiesData,
+    ...stored.activitiesData,
+    activities: stored.activitiesData.activities.map((a: any) => ({
+      image: '',
+      contactSubject: 'autre',
+      ...a,
+    })),
+  };
 }
 
 function loadFromStorage(): AdminState {
@@ -135,8 +166,11 @@ function loadFromStorage(): AdminState {
       return {
         ...deepClone(defaultAdminState),
         ...parsed,
+        activitiesData: migrateActivities(parsed) || deepClone(defaultActivitiesData),
         emailConfig: { ...defaultEmailConfig, ...(parsed.emailConfig || {}) },
         logoConfig: { ...defaultLogoConfig, ...(parsed.logoConfig || {}) },
+        portfolioData: { ...defaultPortfolioConfig, ...(parsed.portfolioData || {}) },
+        trackingConfig: { ...defaultTracking, ...(parsed.trackingConfig || {}) },
       };
     }
   } catch {}
@@ -152,6 +186,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(
     () => sessionStorage.getItem('cedevium-admin-auth') === 'true'
   );
+  const [prefilledSubject, setPrefilledSubject] = useState('');
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
@@ -217,6 +252,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       ...data,
       isAdminOpen,
       isAuthenticated,
+      prefilledSubject,
       openAdmin: () => setIsAdminOpen(true),
       closeAdmin: () => setIsAdminOpen(false),
       login,
@@ -232,6 +268,9 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       updateImages: (v) => update('images', v),
       updateEmailConfig: (v) => update('emailConfig', v),
       updateLogoConfig: (v) => update('logoConfig', v),
+      updatePortfolioData: (v) => update('portfolioData', v),
+      updateTrackingConfig: (v) => update('trackingConfig', v),
+      setPrefilledSubject,
       addPage,
       updatePage,
       deletePage,

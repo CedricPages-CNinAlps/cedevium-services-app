@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, RotateCcw, LogOut, Settings, Image, Briefcase, Activity, Gamepad2, Phone, Navigation, Shield, ImageIcon, Mail, FileText, Menu } from 'lucide-react';
+import { X, RotateCcw, LogOut, Settings, Image, Briefcase, Activity, Gamepad2, Phone, Navigation, Shield, ImageIcon, Mail, FileText, Menu, LayoutGrid, BarChart2 } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
 import AdminLogin from './AdminLogin';
 import HeroSection from './sections/HeroSection';
@@ -13,11 +13,14 @@ import AssetsSection from './sections/AssetsSection';
 import EmailSection from './sections/EmailSection';
 import PagesSection from './sections/PagesSection';
 import LogoSection from './sections/LogoSection';
+import PortfolioSection from './sections/PortfolioSection';
+import TrackingSection from './sections/TrackingSection';
 
 const SECTIONS = [
   { id: 'hero', label: 'Hero & Image', Icon: Image, group: 'Contenu' },
-  { id: 'services', label: 'Services', Icon: Briefcase, group: 'Contenu' },
-  { id: 'activities', label: 'Activités', Icon: Activity, group: 'Contenu' },
+  { id: 'services', label: 'Activités (cartes)', Icon: Briefcase, group: 'Contenu' },
+  { id: 'activities', label: 'Services (blocs)', Icon: Activity, group: 'Contenu' },
+  { id: 'portfolio', label: 'Portfolio (slider)', Icon: LayoutGrid, group: 'Contenu' },
   { id: 'games', label: 'Jeux', Icon: Gamepad2, group: 'Contenu' },
   { id: 'contact', label: 'Contact', Icon: Phone, group: 'Contenu' },
   { id: 'navigation', label: 'Navigation & Footer', Icon: Navigation, group: 'Contenu' },
@@ -25,6 +28,7 @@ const SECTIONS = [
   { id: 'pages', label: 'Pages', Icon: FileText, group: 'Identité' },
   { id: 'assets', label: 'Médiathèque', Icon: Image, group: 'Médias' },
   { id: 'email', label: 'Email (formulaire)', Icon: Mail, group: 'Paramètres' },
+  { id: 'tracking', label: 'Tags & Analytics', Icon: BarChart2, group: 'Paramètres' },
   { id: 'security', label: 'Sécurité', Icon: Shield, group: 'Paramètres' },
 ];
 
@@ -59,6 +63,7 @@ const AdminPanel: React.FC = () => {
       case 'hero': return <HeroSection />;
       case 'services': return <ServicesSection />;
       case 'activities': return <ActivitiesSection />;
+      case 'portfolio': return <PortfolioSection />;
       case 'games': return <GamesSection />;
       case 'contact': return <ContactSection />;
       case 'navigation': return <NavigationSection />;
@@ -66,6 +71,7 @@ const AdminPanel: React.FC = () => {
       case 'pages': return <PagesSection />;
       case 'assets': return <AssetsSection />;
       case 'email': return <EmailSection />;
+      case 'tracking': return <TrackingSection />;
       case 'security': return <SecuritySection />;
       default: return null;
     }

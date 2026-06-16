@@ -25,7 +25,7 @@ const Services: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Nos <span className="text-accent">Services</span>
+            Nos <span className="text-accent">Activités</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {servicesData.subtitle}

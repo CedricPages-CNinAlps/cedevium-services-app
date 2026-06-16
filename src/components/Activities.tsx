@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code, Briefcase, Palette, Network, ArrowRight } from 'lucide-react';
+import { Code, Briefcase, Palette, Network, ArrowRight, MessageCircle } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
 
 const Activities: React.FC = () => {
-  const { activitiesData } = useAdminData();
+  const { activitiesData, setPrefilledSubject } = useAdminData();
+
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
       case 'Code': return Code;
@@ -17,17 +18,18 @@ const Activities: React.FC = () => {
 
   const getColorClasses = (color: string) => {
     switch(color) {
-      case 'orange':
-        return 'bg-accent text-white';
-      case 'blue':
-        return 'bg-primary text-white';
-      case 'purple':
-        return 'bg-purple-600 text-white';
-      default:
-        return 'bg-accent text-white';
+      case 'orange': return 'bg-accent text-white';
+      case 'blue': return 'bg-primary text-white';
+      case 'purple': return 'bg-purple-600 text-white';
+      default: return 'bg-accent text-white';
     }
   };
 
+  const handleContactClick = (contactSubject: string) => {
+    setPrefilledSubject(contactSubject || 'autre');
+    const section = document.getElementById('contact');
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section id="activities" className="py-20 bg-white">
@@ -39,7 +41,7 @@ const Activities: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Nos <span className="text-accent">Activités</span>
+            Nos <span className="text-accent">Services</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {activitiesData.subtitle}
@@ -49,6 +51,9 @@ const Activities: React.FC = () => {
         <div className="space-y-12">
           {activitiesData.activities.map((activity, index) => {
             const IconComponent = getIconComponent(activity.icon);
+            const image = (activity as any).image as string | undefined;
+            const contactSubject = (activity as any).contactSubject as string | undefined;
+
             return (
               <motion.div
                 key={activity.id}
@@ -59,19 +64,29 @@ const Activities: React.FC = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
               >
+                {/* Panneau coloré — icône + logo optionnel sur la même ligne */}
                 <div className={`md:w-1/3 ${getColorClasses(activity.color)} p-8 flex flex-col justify-center`}>
-                  <div className="mb-4">
+                  <div className="flex items-center justify-between mb-4">
                     <IconComponent size={48} />
+                    {image && (
+                      <img
+                        src={image}
+                        alt={`Logo ${activity.subtitle}`}
+                        className="h-12 w-auto object-contain max-w-[100px] rounded"
+                        style={{ filter: 'brightness(0) invert(1)' }}
+                      />
+                    )}
                   </div>
                   <h3 className="text-2xl font-bold mb-2">{activity.title}</h3>
                   <h4 className="text-xl mb-4">{activity.subtitle}</h4>
                 </div>
-                
+
+                {/* Contenu principal */}
                 <div className="md:w-2/3 bg-gray-50 p-8">
                   <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                     {activity.description}
                   </p>
-                  
+
                   <div className="mb-6">
                     <h5 className="font-bold text-lg mb-3 text-primary">Services inclus :</h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -83,21 +98,33 @@ const Activities: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                  
-                  <motion.button
-                    className={`inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                      activity.color === 'orange' 
-                        ? 'bg-accent hover-accent-light text-white' 
-                        : activity.color === 'blue'
-                        ? 'bg-primary hover-primary-light text-white'
-                        : 'bg-purple-600 hover:bg-purple-700 text-white'
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <span>En savoir plus</span>
-                    <ArrowRight size={20} />
-                  </motion.button>
+
+                  <div className="flex flex-wrap gap-3">
+                    <motion.button
+                      className={`inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                        activity.color === 'orange'
+                          ? 'bg-accent hover-accent-light text-white'
+                          : activity.color === 'blue'
+                          ? 'bg-primary hover-primary-light text-white'
+                          : 'bg-purple-600 hover:bg-purple-700 text-white'
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span>En savoir plus</span>
+                      <ArrowRight size={20} />
+                    </motion.button>
+
+                    <motion.button
+                      onClick={() => handleContactClick(contactSubject || 'autre')}
+                      className="inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold border-2 border-accent text-accent hover:bg-accent hover:text-white transition-all duration-300"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <MessageCircle size={20} />
+                      <span>Nous contacter</span>
+                    </motion.button>
+                  </div>
                 </div>
               </motion.div>
             );

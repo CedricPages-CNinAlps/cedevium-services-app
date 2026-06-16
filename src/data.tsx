@@ -115,7 +115,9 @@ export const activitiesData = {
         "Maintenance de sites internet"
       ],
       color: "orange",
-      icon: "Code"
+      icon: "Code",
+      image: "",
+      contactSubject: "developpement-web"
     },
     {
       id: 2,
@@ -129,7 +131,9 @@ export const activitiesData = {
         "Événements de groupe et animation"
       ],
       color: "blue",
-      icon: "Network"
+      icon: "Network",
+      image: "",
+      contactSubject: "services-entreprises"
     },
     {
       id: 3,
@@ -143,9 +147,33 @@ export const activitiesData = {
         "Projets pour particuliers et professionnels"
       ],
       color: "orange",
-      icon: "Palette"
+      icon: "Palette",
+      image: "",
+      contactSubject: "conception-3d"
     }
   ]
+};
+
+// Données du slider portfolio
+export interface PortfolioItem {
+  id: string;
+  title: string;
+  url: string;
+  image: string;
+  description: string;
+}
+
+export const portfolioData = {
+  title: "Nos Réalisations",
+  subtitle: "Quelques exemples de projets que nous avons réalisés",
+  items: [] as PortfolioItem[]
+};
+
+// Configuration du suivi analytique
+export const trackingConfig = {
+  googleTagId: "",
+  matomoUrl: "",
+  matomoSiteId: "",
 };
 
 // Données du composant Contact
@@ -415,5 +443,7 @@ export default {
   contactData,
   headerData,
   footerData,
-  siteConfig
+  siteConfig,
+  portfolioData,
+  trackingConfig,
 };

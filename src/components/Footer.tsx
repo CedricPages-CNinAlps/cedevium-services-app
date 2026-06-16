@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
 
 const Footer: React.FC = () => {
-  const { footerData, logoConfig } = useAdminData();
+  const { footerData, logoConfig, openAdmin } = useAdminData();
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
       case 'Mail': return Mail;
@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <motion.div
-          className="border-t border-gray-600 mt-8 pt-8 text-center"
+          className="border-t border-gray-600 mt-8 pt-8 flex items-center justify-center gap-3"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -87,6 +87,13 @@ const Footer: React.FC = () => {
           <p className="text-gray-300">
             {footerData.copyright}
           </p>
+          <button
+            onClick={openAdmin}
+            title="Ouvrir le back office (Ctrl+Shift+A)"
+            className="text-gray-600 hover:text-gray-300 transition-colors text-base leading-none"
+          >
+            ⚙
+          </button>
         </motion.div>
       </div>
     </footer>

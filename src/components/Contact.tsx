@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { useAdminData } from '../contexts/AdminDataContext';
 
 const Contact: React.FC = () => {
-  const { contactData, emailConfig } = useAdminData();
+  const { contactData, emailConfig, prefilledSubject, setPrefilledSubject } = useAdminData();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,6 +16,13 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  useEffect(() => {
+    if (prefilledSubject) {
+      setFormData(prev => ({ ...prev, subject: prefilledSubject }));
+      setPrefilledSubject('');
+    }
+  }, [prefilledSubject, setPrefilledSubject]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({

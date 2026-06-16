@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/logo-cedevium-services.jpg" />
@@ -7,37 +7,135 @@
     <meta name="theme-color" content="#DC582A" />
     <meta
       name="description"
-      content="Cedevium Services - Team building et activités d'entreprise"
+      content="Cedevium Services — Développement Web & SaaS, Services Entreprises, Conception 3D. Solutions sur mesure pour votre entreprise."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-cedevium-services.jpg" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Cedevium Services" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cedevium Services" />
+    <meta property="og:description" content="Développement Web & SaaS, Services Entreprises, Conception 3D." />
+    <meta property="og:url" content="https://cedricpages-cninalps.github.io/cedevium-services-app" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-cedevium-services.jpg" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
     <title>Cedevium Services</title>
+
+    <!-- ═══ Schema.org / JSON-LD (SEO) ═══ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization",
+          "name": "Cedevium Services",
+          "url": "https://cedricpages-cninalps.github.io/cedevium-services-app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://cedricpages-cninalps.github.io/cedevium-services-app/logo-cedevium-services.jpg"
+          },
+          "description": "Développement Web & SaaS, Services Entreprises et Conception 3D pour professionnels et particuliers.",
+          "areaServed": {
+            "@type": "Country",
+            "name": "France"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "email": "contact@cedevium-services.fr",
+            "availableLanguage": "French"
+          },
+          "sameAs": []
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#website",
+          "url": "https://cedricpages-cninalps.github.io/cedevium-services-app",
+          "name": "Cedevium Services",
+          "inLanguage": "fr-FR",
+          "publisher": {
+            "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://cedricpages-cninalps.github.io/cedevium-services-app/?s={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#business",
+          "name": "Cedevium Services",
+          "url": "https://cedricpages-cninalps.github.io/cedevium-services-app",
+          "image": "https://cedricpages-cninalps.github.io/cedevium-services-app/logo-cedevium-services.jpg",
+          "description": "Votre partenaire pour le développement web, les services entreprises et la conception 3D.",
+          "areaServed": "FR",
+          "currenciesAccepted": "EUR",
+          "priceRange": "€€",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Services Cedevium",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Développement Web & SaaS",
+                  "description": "Création de sites internet, applications web, plateformes SaaS et automatisation de processus réglementaires de génération de documents.",
+                  "provider": {
+                    "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Services Entreprises",
+                  "description": "Prestation de services divers pour des entreprises : aide, communication, services web et animation d'événements de groupe.",
+                  "provider": {
+                    "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Conception 3D",
+                  "description": "Aide à la conception 3D sur logiciels d'aménagement professionnels (cuisine, dressing) pour professionnels et particuliers, sans activité de montage.",
+                  "provider": {
+                    "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══ Tarte au Citron — Gestionnaire de consentement cookies (RGPD) ═══ -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tarteaucitronjs/css/tarteaucitron.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/tarteaucitronjs/tarteaucitron.js"
+      defer
+    ></script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Vous devez activer JavaScript pour utiliser ce site.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
