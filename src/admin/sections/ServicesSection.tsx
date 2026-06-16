@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, FormSelect, StringListEditor, SectionCard, SaveButton } from '../AdminComponents';
-import { SortableItem } from '../SortableItem';
+import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 
 const ICON_OPTIONS = [
   { value: 'Code', label: 'Code' },
@@ -77,11 +75,7 @@ const ServicesSection: React.FC = () => {
         </div>
       </SectionCard>
 
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={local.services.map((s: any) => String(s.id))}
-          strategy={verticalListSortingStrategy}
-        >
+      <DragSortContext onDragEnd={handleDragEnd}>
           {local.services.map((service: any, index: number) => (
             <SortableItem key={String(service.id)} id={String(service.id)}>
               {(dragHandle) => (
@@ -107,8 +101,7 @@ const ServicesSection: React.FC = () => {
               )}
             </SortableItem>
           ))}
-        </SortableContext>
-      </DndContext>
+      </DragSortContext>
 
       <button type="button" onClick={addService}
         className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">

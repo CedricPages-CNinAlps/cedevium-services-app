@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Plus, Trash2, Upload, X } from 'lucide-react';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, FormSelect, StringListEditor, SectionCard, SaveButton } from '../AdminComponents';
-import { SortableItem } from '../SortableItem';
+import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 
 const COLOR_OPTIONS = [
   { value: 'orange', label: 'Orange' },
@@ -107,11 +105,7 @@ const ActivitiesSection: React.FC = () => {
         </div>
       </SectionCard>
 
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={local.activities.map((a: any) => String(a.id))}
-          strategy={verticalListSortingStrategy}
-        >
+      <DragSortContext onDragEnd={handleDragEnd}>
       {local.activities.map((activity: any, index: number) => (
         <SortableItem key={String(activity.id)} id={String(activity.id)}>
           {(dragHandle) => (
@@ -195,8 +189,7 @@ const ActivitiesSection: React.FC = () => {
           )}
         </SortableItem>
       ))}
-        </SortableContext>
-      </DndContext>
+      </DragSortContext>
 
       <button type="button" onClick={addActivity}
         className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">

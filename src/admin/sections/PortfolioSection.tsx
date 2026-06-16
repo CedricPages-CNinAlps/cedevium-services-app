@@ -1,10 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Plus, Trash2, Upload, ExternalLink } from 'lucide-react';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
-import { SortableItem } from '../SortableItem';
+import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 import { PortfolioItem } from '../../contexts/AdminDataContext';
 
 const PortfolioSection: React.FC = () => {
@@ -79,8 +77,7 @@ const PortfolioSection: React.FC = () => {
         </div>
       )}
 
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={local.items.map((i: PortfolioItem) => i.id)} strategy={verticalListSortingStrategy}>
+      <DragSortContext onDragEnd={handleDragEnd}>
           {local.items.map((item: PortfolioItem, index: number) => (
             <SortableItem key={item.id} id={item.id}>
               {(dragHandle) => (
@@ -146,8 +143,7 @@ const PortfolioSection: React.FC = () => {
               )}
             </SortableItem>
           ))}
-        </SortableContext>
-      </DndContext>
+      </DragSortContext>
 
       <button type="button" onClick={addItem}
         className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
-import { SortableItem } from '../SortableItem';
+import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 
 const NAV_ICON_OPTIONS = ['Home', 'Briefcase', 'Code', 'Gamepad2', 'Mail', 'Globe', 'Info', 'Star', 'Phone'];
 
@@ -116,11 +114,7 @@ const NavigationSection: React.FC = () => {
 
       <SectionCard title={`Liens de navigation (${localHeader.navigation.length})`}>
         <div className="space-y-3">
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleNavDragEnd}>
-            <SortableContext
-              items={localHeader.navigation.map((_: typeof headerData.navigation[0], i: number) => String(i))}
-              strategy={verticalListSortingStrategy}
-            >
+          <DragSortContext onDragEnd={handleNavDragEnd}>
               {localHeader.navigation.map((item: typeof headerData.navigation[0], index: number) => (
                 <SortableItem key={index} id={String(index)}>
                   {(dragHandle) => (
@@ -145,8 +139,7 @@ const NavigationSection: React.FC = () => {
                   )}
                 </SortableItem>
               ))}
-            </SortableContext>
-          </DndContext>
+          </DragSortContext>
           <button type="button" onClick={addNavItem}
             className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
             <Plus size={16} /> Ajouter un lien
@@ -173,11 +166,7 @@ const NavigationSection: React.FC = () => {
             onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
               ...prev, quickLinks: { ...prev.quickLinks, title: v },
             }))} />
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleFooterLinkDragEnd}>
-            <SortableContext
-              items={localFooter.quickLinks.links.map((_: typeof footerData.quickLinks.links[0], i: number) => String(i))}
-              strategy={verticalListSortingStrategy}
-            >
+          <DragSortContext onDragEnd={handleFooterLinkDragEnd}>
               {localFooter.quickLinks.links.map((link: typeof footerData.quickLinks.links[0], index: number) => (
                 <SortableItem key={index} id={String(index)}>
                   {(dragHandle) => (
@@ -195,8 +184,7 @@ const NavigationSection: React.FC = () => {
                   )}
                 </SortableItem>
               ))}
-            </SortableContext>
-          </DndContext>
+          </DragSortContext>
           <button type="button" onClick={addFooterLink}
             className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
             <Plus size={16} /> Ajouter un lien

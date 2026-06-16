@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, FormSelect, SectionCard, SaveButton } from '../AdminComponents';
-import { SortableItem } from '../SortableItem';
+import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 import EmojiPicker from '../components/EmojiPicker';
 
 const DIFFICULTY_OPTIONS = [
@@ -99,11 +97,7 @@ const GamesSection: React.FC = () => {
 
       <SectionCard title={`Jeux (${local.games.length})`}>
         <div className="space-y-4">
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext
-              items={local.games.map((g: typeof gamesData.games[0]) => String(g.id))}
-              strategy={verticalListSortingStrategy}
-            >
+          <DragSortContext onDragEnd={handleDragEnd}>
           {local.games.map((game: typeof gamesData.games[0], index: number) => (
             <SortableItem key={String(game.id)} id={String(game.id)}>
               {(dragHandle) => (
@@ -164,8 +158,7 @@ const GamesSection: React.FC = () => {
               )}
             </SortableItem>
           ))}
-            </SortableContext>
-          </DndContext>
+          </DragSortContext>
 
           <button
             type="button"
