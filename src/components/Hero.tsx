@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
       setCurrentSlide((prev) => (prev + 1) % heroData.slides.length);
     }, heroData.slider.autoPlayInterval);
     return () => clearInterval(timer);
-  }, [heroData.slides.length]);
+  }, [heroData.slides.length, heroData.slider.autoPlayInterval]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroData.slides.length);

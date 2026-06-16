@@ -433,7 +433,7 @@ export const siteConfig = {
   author: "Cedevium Services"
 };
 
-export default {
+const cedeviumData = {
   colors,
   images,
   heroData,
@@ -447,3 +447,4 @@ export default {
   portfolioData,
   trackingConfig,
 };
+export default cedeviumData;

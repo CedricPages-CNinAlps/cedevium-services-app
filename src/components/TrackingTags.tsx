@@ -11,7 +11,6 @@ const TrackingTags: React.FC = () => {
   const { trackingConfig } = useAdminData();
   const initialized = useRef(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (initialized.current) return;
 
@@ -75,7 +74,7 @@ const TrackingTags: React.FC = () => {
       }, 100);
       setTimeout(() => clearInterval(timer), 5000);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };
