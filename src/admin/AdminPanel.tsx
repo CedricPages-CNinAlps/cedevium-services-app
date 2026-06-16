@@ -61,8 +61,8 @@ const AdminPanel: React.FC = () => {
   const renderSection = () => {
     switch (activeSection) {
       case 'hero': return <HeroSection />;
-      case 'services': return <ServicesSection />;
-      case 'activities': return <ActivitiesSection />;
+      case 'services': return <ActivitiesSection />;
+      case 'activities': return <ServicesSection />;
       case 'portfolio': return <PortfolioSection />;
       case 'games': return <GamesSection />;
       case 'contact': return <ContactSection />;

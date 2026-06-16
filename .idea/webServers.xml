@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="16c98651-549f-4ca7-9ded-52b61ba3e4fc" name="cedevium" url="http://1j9gv3.ftp.infomaniak.com">
+        <fileTransfer rootFolder="/sites/cedevium-services.fr" accessType="FTPS" host="1j9gv3.ftp.infomaniak.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

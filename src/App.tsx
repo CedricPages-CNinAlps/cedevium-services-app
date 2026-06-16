@@ -29,8 +29,8 @@ function AppContent() {
     <div className="App">
       <Header />
       <Hero />
-      <Services />
       <Activities />
+      <Services />
       <Portfolio />
       <Games />
       <Contact />
