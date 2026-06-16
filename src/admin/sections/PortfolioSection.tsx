@@ -1,7 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Plus, Trash2, Upload, ExternalLink } from 'lucide-react';
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
+import { SortableItem } from '../SortableItem';
 import { PortfolioItem } from '../../contexts/AdminDataContext';
 
 const PortfolioSection: React.FC = () => {
@@ -44,6 +47,16 @@ const PortfolioSection: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    setLocal((prev: typeof portfolioData) => {
+      const oldIndex = prev.items.findIndex((i: PortfolioItem) => i.id === String(active.id));
+      const newIndex = prev.items.findIndex((i: PortfolioItem) => i.id === String(over.id));
+      return { ...prev, items: arrayMove(prev.items, oldIndex, newIndex) };
+    });
+  };
+
   const handleSave = () => {
     updatePortfolioData(local);
     setSaved(true);
@@ -66,8 +79,12 @@ const PortfolioSection: React.FC = () => {
         </div>
       )}
 
-      {local.items.map((item: PortfolioItem, index: number) => (
-        <SectionCard key={item.id} title={`Projet ${index + 1} — ${item.title}`} defaultOpen={index === 0}>
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={local.items.map((i: PortfolioItem) => i.id)} strategy={verticalListSortingStrategy}>
+          {local.items.map((item: PortfolioItem, index: number) => (
+            <SortableItem key={item.id} id={item.id}>
+              {(dragHandle) => (
+        <SectionCard key={item.id} title={`Projet ${index + 1} — ${item.title}`} defaultOpen={index === 0} dragHandle={dragHandle}>
           <div className="space-y-4">
             <div className="flex justify-end">
               <button type="button" onClick={() => removeItem(index)}
@@ -126,7 +143,11 @@ const PortfolioSection: React.FC = () => {
             </div>
           </div>
         </SectionCard>
-      ))}
+              )}
+            </SortableItem>
+          ))}
+        </SortableContext>
+      </DndContext>
 
       <button type="button" onClick={addItem}
         className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">

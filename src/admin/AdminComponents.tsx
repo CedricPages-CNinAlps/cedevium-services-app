@@ -126,21 +126,30 @@ interface SectionCardProps {
   title: string;
   children: React.ReactNode;
   defaultOpen?: boolean;
+  /** Nœud React placé à gauche du titre — utilisé pour la poignée DnD */
+  dragHandle?: React.ReactNode;
 }
 
-export const SectionCard: React.FC<SectionCardProps> = ({ title, children, defaultOpen = true }) => {
+export const SectionCard: React.FC<SectionCardProps> = ({ title, children, defaultOpen = true, dragHandle }) => {
   const [open, setOpen] = React.useState(defaultOpen);
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-4">
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition-colors"
-      >
-        <span className="font-semibold text-[#1E1A34]">{title}</span>
-        <span className="text-gray-400 text-lg">{open ? '▲' : '▼'}</span>
-      </button>
+      <div className="flex items-stretch">
+        {dragHandle && (
+          <div className="flex items-center justify-center px-2 border-r border-gray-100 bg-gray-50 flex-shrink-0">
+            {dragHandle}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="flex-1 flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition-colors min-w-0"
+        >
+          <span className="font-semibold text-[#1E1A34] truncate">{title}</span>
+          <span className="text-gray-400 text-lg ml-2 flex-shrink-0">{open ? '▲' : '▼'}</span>
+        </button>
+      </div>
       {open && (
         <div className="px-6 pb-6 pt-2 border-t border-gray-100">
           {children}

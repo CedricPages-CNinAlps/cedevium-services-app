@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, FormSelect, SectionCard, SaveButton } from '../AdminComponents';
+import { SortableItem } from '../SortableItem';
 import EmojiPicker from '../components/EmojiPicker';
 
 const DIFFICULTY_OPTIONS = [
@@ -60,6 +63,17 @@ const GamesSection: React.FC = () => {
     }));
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    setLocal((prev: typeof gamesData) => {
+      const items = prev.games;
+      const oldIndex = items.findIndex((g: typeof gamesData.games[0]) => String(g.id) === String(active.id));
+      const newIndex = items.findIndex((g: typeof gamesData.games[0]) => String(g.id) === String(over.id));
+      return { ...prev, games: arrayMove(items, oldIndex, newIndex) };
+    });
+  };
+
   const handleSave = () => {
     updateGamesData(local);
     setSaved(true);
@@ -85,10 +99,20 @@ const GamesSection: React.FC = () => {
 
       <SectionCard title={`Jeux (${local.games.length})`}>
         <div className="space-y-4">
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={local.games.map((g: typeof gamesData.games[0]) => String(g.id))}
+              strategy={verticalListSortingStrategy}
+            >
           {local.games.map((game: typeof gamesData.games[0], index: number) => (
-            <div key={game.id} className="border border-gray-200 rounded-xl p-4">
+            <SortableItem key={String(game.id)} id={String(game.id)}>
+              {(dragHandle) => (
+            <div className="border border-gray-200 rounded-xl p-4">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-medium text-gray-800 text-sm">{game.emoji} {game.name}</span>
+                <div className="flex items-center gap-2">
+                  {dragHandle}
+                  <span className="font-medium text-gray-800 text-sm">{game.emoji} {game.name}</span>
+                </div>
                 <button
                   type="button"
                   onClick={() => removeGame(index)}
@@ -137,7 +161,11 @@ const GamesSection: React.FC = () => {
                 </div>
               </div>
             </div>
+              )}
+            </SortableItem>
           ))}
+            </SortableContext>
+          </DndContext>
 
           <button
             type="button"

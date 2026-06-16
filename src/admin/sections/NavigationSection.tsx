@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
+import { SortableItem } from '../SortableItem';
 
 const NAV_ICON_OPTIONS = ['Home', 'Briefcase', 'Code', 'Gamepad2', 'Mail', 'Globe', 'Info', 'Star', 'Phone'];
 
@@ -66,6 +69,31 @@ const NavigationSection: React.FC = () => {
     }));
   };
 
+  const handleNavDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = Number(active.id);
+    const newIndex = Number(over.id);
+    setLocalHeader((prev: typeof headerData) => ({
+      ...prev,
+      navigation: arrayMove(prev.navigation, oldIndex, newIndex),
+    }));
+  };
+
+  const handleFooterLinkDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = Number(active.id);
+    const newIndex = Number(over.id);
+    setLocalFooter((prev: typeof footerData) => ({
+      ...prev,
+      quickLinks: {
+        ...prev.quickLinks,
+        links: arrayMove(prev.quickLinks.links, oldIndex, newIndex),
+      },
+    }));
+  };
+
   const handleSave = () => {
     updateHeaderData(localHeader);
     updateFooterData(localFooter);
@@ -88,25 +116,37 @@ const NavigationSection: React.FC = () => {
 
       <SectionCard title={`Liens de navigation (${localHeader.navigation.length})`}>
         <div className="space-y-3">
-          {localHeader.navigation.map((item: typeof headerData.navigation[0], index: number) => (
-            <div key={index} className="flex gap-2 items-start border border-gray-100 rounded-lg p-3">
-              <div className="flex-1 grid grid-cols-3 gap-2">
-                <FormField label="Libellé" value={item.name} onChange={(v) => updateNavItem(index, 'name', v)} />
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Icône</label>
-                  <select value={item.icon} onChange={(e) => updateNavItem(index, 'icon', e.target.value)}
-                    className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#DC582A]">
-                    {NAV_ICON_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </select>
-                </div>
-                <FormField label="Ancre (href)" value={item.href} onChange={(v) => updateNavItem(index, 'href', v)} placeholder="#section" />
-              </div>
-              <button type="button" onClick={() => removeNavItem(index)}
-                className="mt-6 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0">
-                <Trash2 size={15} />
-              </button>
-            </div>
-          ))}
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleNavDragEnd}>
+            <SortableContext
+              items={localHeader.navigation.map((_: typeof headerData.navigation[0], i: number) => String(i))}
+              strategy={verticalListSortingStrategy}
+            >
+              {localHeader.navigation.map((item: typeof headerData.navigation[0], index: number) => (
+                <SortableItem key={index} id={String(index)}>
+                  {(dragHandle) => (
+                    <div className="flex gap-2 items-start border border-gray-100 rounded-lg p-3">
+                      <div className="flex items-start pt-6 flex-shrink-0">{dragHandle}</div>
+                      <div className="flex-1 grid grid-cols-3 gap-2">
+                        <FormField label="Libellé" value={item.name} onChange={(v) => updateNavItem(index, 'name', v)} />
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Icône</label>
+                          <select value={item.icon} onChange={(e) => updateNavItem(index, 'icon', e.target.value)}
+                            className="w-full px-2 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#DC582A]">
+                            {NAV_ICON_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                          </select>
+                        </div>
+                        <FormField label="Ancre (href)" value={item.href} onChange={(v) => updateNavItem(index, 'href', v)} placeholder="#section" />
+                      </div>
+                      <button type="button" onClick={() => removeNavItem(index)}
+                        className="mt-6 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0">
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  )}
+                </SortableItem>
+              ))}
+            </SortableContext>
+          </DndContext>
           <button type="button" onClick={addNavItem}
             className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
             <Plus size={16} /> Ajouter un lien
@@ -133,18 +173,30 @@ const NavigationSection: React.FC = () => {
             onChange={(v) => setLocalFooter((prev: typeof footerData) => ({
               ...prev, quickLinks: { ...prev.quickLinks, title: v },
             }))} />
-          {localFooter.quickLinks.links.map((link: typeof footerData.quickLinks.links[0], index: number) => (
-            <div key={index} className="flex gap-2 items-end">
-              <div className="flex-1 grid grid-cols-2 gap-2">
-                <FormField label="Libellé" value={link.name} onChange={(v) => updateFooterLink(index, 'name', v)} />
-                <FormField label="Ancre (href)" value={link.href} onChange={(v) => updateFooterLink(index, 'href', v)} />
-              </div>
-              <button type="button" onClick={() => removeFooterLink(index)}
-                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors mb-0.5">
-                <Trash2 size={15} />
-              </button>
-            </div>
-          ))}
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleFooterLinkDragEnd}>
+            <SortableContext
+              items={localFooter.quickLinks.links.map((_: typeof footerData.quickLinks.links[0], i: number) => String(i))}
+              strategy={verticalListSortingStrategy}
+            >
+              {localFooter.quickLinks.links.map((link: typeof footerData.quickLinks.links[0], index: number) => (
+                <SortableItem key={index} id={String(index)}>
+                  {(dragHandle) => (
+                    <div className="flex gap-2 items-end">
+                      <div className="flex items-end pb-0.5 flex-shrink-0">{dragHandle}</div>
+                      <div className="flex-1 grid grid-cols-2 gap-2">
+                        <FormField label="Libellé" value={link.name} onChange={(v) => updateFooterLink(index, 'name', v)} />
+                        <FormField label="Ancre (href)" value={link.href} onChange={(v) => updateFooterLink(index, 'href', v)} />
+                      </div>
+                      <button type="button" onClick={() => removeFooterLink(index)}
+                        className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors mb-0.5">
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  )}
+                </SortableItem>
+              ))}
+            </SortableContext>
+          </DndContext>
           <button type="button" onClick={addFooterLink}
             className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-300 rounded-xl text-sm text-gray-500 hover:border-[#DC582A] hover:text-[#DC582A] transition-colors">
             <Plus size={16} /> Ajouter un lien
