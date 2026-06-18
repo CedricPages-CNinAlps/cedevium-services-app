@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -10,10 +10,22 @@ import Footer from './components/Footer';
 import CustomPage from './components/CustomPage';
 import AdminPanel from './admin/AdminPanel';
 import TrackingTags from './components/TrackingTags';
-import { AdminDataProvider } from './contexts/AdminDataContext';
+import { AdminDataProvider, useAdminData } from './contexts/AdminDataContext';
 
 
 function AppContent() {
+  const { logoConfig } = useAdminData();
+
+  useEffect(() => {
+    if (logoConfig.favicon) {
+      const link = document.querySelector("link[rel='icon']") as HTMLLinkElement;
+      if (link) link.href = logoConfig.favicon;
+    }
+    if (logoConfig.appleTouchIcon) {
+      const link = document.querySelector("link[rel='apple-touch-icon']") as HTMLLinkElement;
+      if (link) link.href = logoConfig.appleTouchIcon;
+    }
+  }, [logoConfig.favicon, logoConfig.appleTouchIcon]);
   const pageSlug = new URLSearchParams(window.location.search).get('page');
 
   if (pageSlug) {

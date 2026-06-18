@@ -58,6 +58,8 @@ export interface LogoConfig {
   type: 'text' | 'image';
   imageData: string;
   imageAlt: string;
+  favicon: string;
+  appleTouchIcon: string;
 }
 
 // ── Default values ──────────────────────────────────────────────────────────
@@ -78,6 +80,8 @@ const defaultLogoConfig: LogoConfig = {
   type: 'text',
   imageData: '',
   imageAlt: 'Cedevium Services',
+  favicon: '',
+  appleTouchIcon: '',
 };
 
 interface AdminState {

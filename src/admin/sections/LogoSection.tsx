@@ -9,6 +9,8 @@ const LogoSection: React.FC = () => {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
+  const faviconRef = useRef<HTMLInputElement>(null);
+  const touchIconRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,6 +34,19 @@ const LogoSection: React.FC = () => {
 
   const clearLogo = () => {
     setLocal((prev: typeof logoConfig) => ({ ...prev, type: 'text', imageData: '' }));
+  };
+
+  const handleIconUpload = (field: 'favicon' | 'appleTouchIcon', file: File) => {
+    if (file.size > 1 * 1024 * 1024) {
+      setError('Fichier trop lourd (max 1 Mo).');
+      return;
+    }
+    setError('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      setLocal((prev: typeof logoConfig) => ({ ...prev, [field]: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSave = () => {
@@ -106,6 +121,58 @@ const LogoSection: React.FC = () => {
               <X size={16} /> Supprimer le logo (revenir aux initiales)
             </button>
           )}
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Favicon (onglet navigateur)">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500">Icône affichée dans l'onglet du navigateur. Format recommandé : ICO ou PNG carré (32×32 ou 64×64 px).</p>
+          <div className="flex items-center gap-4">
+            {local.favicon ? (
+              <div className="flex items-center gap-3">
+                <img src={local.favicon} alt="favicon" className="w-8 h-8 object-contain border rounded" />
+                <button type="button" onClick={() => setLocal((prev: typeof logoConfig) => ({ ...prev, favicon: '' }))}
+                  className="p-1 text-red-400 hover:text-red-600"><X size={16} /></button>
+              </div>
+            ) : (
+              <div className="w-8 h-8 bg-gray-100 border rounded flex items-center justify-center text-gray-300 text-xs">?</div>
+            )}
+            <button type="button" onClick={() => faviconRef.current?.click()}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors">
+              <Upload size={15} /> Uploader
+            </button>
+            <input ref={faviconRef} type="file" accept="image/*,.ico" className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleIconUpload('favicon', f); e.target.value = ''; }} />
+          </div>
+          <FormField label="Ou URL externe" value={local.favicon?.startsWith('data:') ? '' : (local.favicon || '')}
+            onChange={(v) => setLocal((prev: typeof logoConfig) => ({ ...prev, favicon: v }))}
+            placeholder="https://exemple.com/favicon.ico" />
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Icône mobile (ajout à l'écran d'accueil)">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500">Icône affichée quand un utilisateur ajoute le site sur son smartphone ou tablette. Format recommandé : PNG carré (180×180 px).</p>
+          <div className="flex items-center gap-4">
+            {local.appleTouchIcon ? (
+              <div className="flex items-center gap-3">
+                <img src={local.appleTouchIcon} alt="touch icon" className="w-12 h-12 object-contain border rounded-xl" />
+                <button type="button" onClick={() => setLocal((prev: typeof logoConfig) => ({ ...prev, appleTouchIcon: '' }))}
+                  className="p-1 text-red-400 hover:text-red-600"><X size={16} /></button>
+              </div>
+            ) : (
+              <div className="w-12 h-12 bg-gray-100 border rounded-xl flex items-center justify-center text-gray-300 text-xs">?</div>
+            )}
+            <button type="button" onClick={() => touchIconRef.current?.click()}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors">
+              <Upload size={15} /> Uploader
+            </button>
+            <input ref={touchIconRef} type="file" accept="image/*" className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleIconUpload('appleTouchIcon', f); e.target.value = ''; }} />
+          </div>
+          <FormField label="Ou URL externe" value={local.appleTouchIcon?.startsWith('data:') ? '' : (local.appleTouchIcon || '')}
+            onChange={(v) => setLocal((prev: typeof logoConfig) => ({ ...prev, appleTouchIcon: v }))}
+            placeholder="https://exemple.com/apple-touch-icon.png" />
         </div>
       </SectionCard>
 
