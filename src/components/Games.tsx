@@ -37,11 +37,37 @@ const Games: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <motion.div
+          className="mb-16 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+            <h3 className="text-2xl font-bold mb-4 text-primary">
+              Pourquoi nos jeux d'équipe ?
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+              {gamesData.benefits.map((benefit, index) => (
+                <div key={index} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-6 h-6 bg-accent rounded-full flex items-center justify-center text-white text-sm font-bold">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-1">{benefit.title}</h4>
+                    <p className="text-gray-600 text-sm">{benefit.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="flex flex-wrap justify-center gap-6">
           {gamesData.games.map((game, index) => (
             <motion.div
               key={game.id}
-              className={`rounded-xl p-6 shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${getColorClasses(index)}`}
+              className={`w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] xl:w-[calc(25%-1.125rem)] rounded-xl p-6 shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${getColorClasses(index)}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -76,32 +102,6 @@ const Games: React.FC = () => {
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          className="mt-16 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4 text-primary">
-              Pourquoi nos jeux d'équipe ?
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-              {gamesData.benefits.map((benefit, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-accent rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    {index + 1}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">{benefit.title}</h4>
-                    <p className="text-gray-600 text-sm">{benefit.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
