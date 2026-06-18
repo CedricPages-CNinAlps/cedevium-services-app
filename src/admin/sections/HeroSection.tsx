@@ -24,7 +24,7 @@ const HeroSection: React.FC = () => {
       : 1;
     setLocal((prev: typeof heroData) => ({
       ...prev,
-      slides: [...prev.slides, { id: newId, title: 'Nouveau titre', subtitle: 'Sous-titre', description: '', cta: 'En savoir plus' }],
+      slides: [...prev.slides, { id: newId, title: 'Nouveau titre', subtitle: 'Sous-titre', description: '', cta: 'En savoir plus', ctaUrl: '' }],
     }));
   };
 
@@ -76,6 +76,7 @@ const HeroSection: React.FC = () => {
             <FormField label="Sous-titre" value={slide.subtitle} onChange={(v) => updateSlide(index, 'subtitle', v)} />
             <FormTextarea label="Description" value={slide.description} onChange={(v) => updateSlide(index, 'description', v)} />
             <FormField label="Texte du bouton CTA" value={slide.cta} onChange={(v) => updateSlide(index, 'cta', v)} />
+            <FormField label="Lien du bouton CTA (URL)" value={slide.ctaUrl || ''} onChange={(v) => updateSlide(index, 'ctaUrl', v)} placeholder="https://... ou laisser vide pour masquer le bouton" />
           </div>
         </SectionCard>
       ))}

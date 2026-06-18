@@ -39,21 +39,24 @@ export const heroData = {
       title: "Développement Web & SaaS",
       subtitle: "Des solutions sur mesure pour votre entreprise",
       description: "Création de sites internet, applications SaaS et automatisation de vos processus documentaires",
-      cta: "Découvrir nos services"
+      cta: "Découvrir nos services",
+      ctaUrl: ""
     },
     {
       id: 2,
       title: "Services Entreprises",
       subtitle: "Votre partenaire pour le développement",
       description: "Aide divers sur vos activités, communication, services web et animation d'événements",
-      cta: "En savoir plus"
+      cta: "En savoir plus",
+      ctaUrl: ""
     },
     {
       id: 3,
       title: "Conception 3D",
       subtitle: "L'aménagement professionnel sans limite",
       description: "Conception 3D pour professionnels et particuliers (cuisine, dressing, etc.) sans activité de montage",
-      cta: "Explorer nos projets"
+      cta: "Explorer nos projets",
+      ctaUrl: ""
     }
   ],
   slider: {
@@ -174,6 +177,7 @@ export const trackingConfig = {
   googleTagId: "",
   matomoUrl: "",
   matomoSiteId: "",
+  matomoTagManagerUrl: "",
 };
 
 // Données du composant Contact

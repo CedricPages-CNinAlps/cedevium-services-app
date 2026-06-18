@@ -61,6 +61,11 @@ const TrackingTags: React.FC = () => {
         tac.user.matomoId = parseInt(trackingConfig.matomoSiteId, 10);
         (tac.job = tac.job || []).push('matomo');
       }
+
+      if (trackingConfig.matomoTagManagerUrl) {
+        tac.user.matomotmUrl = trackingConfig.matomoTagManagerUrl;
+        (tac.job = tac.job || []).push('matomotm');
+      }
     };
 
     if (window.tarteaucitron) {

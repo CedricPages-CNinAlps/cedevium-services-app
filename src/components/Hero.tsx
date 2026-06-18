@@ -72,17 +72,22 @@ const Hero: React.FC = () => {
               {heroData.slides[currentSlide].description}
             </motion.p>
             
-            <motion.button
-              className="bg-blue-night hover-blue-night/80 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span>{heroData.slides[currentSlide].cta}</span>
-              <ArrowRight size={20} />
-            </motion.button>
+            {heroData.slides[currentSlide].ctaUrl && (
+              <motion.a
+                href={heroData.slides[currentSlide].ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-night hover-blue-night/80 text-white font-bold py-4 px-8 rounded-full inline-flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 relative z-20"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span>{heroData.slides[currentSlide].cta}</span>
+                <ArrowRight size={20} />
+              </motion.a>
+            )}
           </motion.div>
         </AnimatePresence>
 

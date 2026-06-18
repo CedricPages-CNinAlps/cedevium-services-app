@@ -69,6 +69,17 @@ const TrackingSection: React.FC = () => {
               Matomo configuré : site {local.matomoSiteId} sur {local.matomoUrl}
             </div>
           )}
+          <FormField
+            label="URL conteneur Matomo Tag Manager"
+            value={local.matomoTagManagerUrl || ''}
+            onChange={(v) => update('matomoTagManagerUrl', v)}
+            placeholder="https://cdn.matomo.cloud/votre-instance.matomo.cloud/container_XXXXXXXX.js"
+          />
+          {local.matomoTagManagerUrl && (
+            <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-2 text-sm text-green-700">
+              Tag Manager configuré : <strong>{local.matomoTagManagerUrl}</strong>
+            </div>
+          )}
         </div>
       </SectionCard>
 
