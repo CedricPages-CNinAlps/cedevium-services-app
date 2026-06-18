@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAdminData } from '../contexts/AdminDataContext';
+import '../styles/custom-page.css';
 
 interface Props {
   slug: string;
@@ -33,7 +34,7 @@ const CustomPage: React.FC<Props> = ({ slug }) => {
           <div className="container mx-auto px-4 max-w-4xl">
             <h1 className="text-4xl font-bold mb-8" style={{ color: '#1E1A34' }}>{page.title}</h1>
             <div
-              className="prose prose-lg max-w-none"
+              className="cedevium-content"
               dangerouslySetInnerHTML={{ __html: page.content }}
             />
           </div>

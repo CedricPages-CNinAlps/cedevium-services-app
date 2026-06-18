@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Eye, EyeOff, ExternalLink, Edit2 } from 'lucide-react';
 import { useAdminData, CustomPage } from '../../contexts/AdminDataContext';
 import { FormField, SectionCard } from '../AdminComponents';
+import '../../styles/custom-page.css';
 
 function slugify(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -43,7 +44,7 @@ const PageEditor: React.FC<{ page: CustomPage; onSave: (updates: Partial<CustomP
           </button>
         </div>
         {preview ? (
-          <div className="border border-gray-200 rounded-xl p-4 min-h-[300px] prose prose-sm max-w-none"
+          <div className="border border-gray-200 rounded-xl p-4 min-h-[300px] cedevium-content cedevium-content-sm"
             dangerouslySetInnerHTML={{ __html: local.content }} />
         ) : (
           <textarea value={local.content} onChange={(e) => update('content', e.target.value)} rows={12}
