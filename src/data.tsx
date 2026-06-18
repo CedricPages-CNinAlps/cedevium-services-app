@@ -120,7 +120,8 @@ export const activitiesData = {
       color: "orange",
       icon: "Code",
       image: "",
-      contactSubject: "developpement-web"
+      contactSubject: "developpement-web",
+      learnMoreUrl: ""
     },
     {
       id: 2,
@@ -136,7 +137,8 @@ export const activitiesData = {
       color: "blue",
       icon: "Network",
       image: "",
-      contactSubject: "services-entreprises"
+      contactSubject: "services-entreprises",
+      learnMoreUrl: ""
     },
     {
       id: 3,
@@ -152,7 +154,8 @@ export const activitiesData = {
       color: "orange",
       icon: "Palette",
       image: "",
-      contactSubject: "conception-3d"
+      contactSubject: "conception-3d",
+      learnMoreUrl: ""
     }
   ]
 };

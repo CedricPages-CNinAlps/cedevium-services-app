@@ -68,6 +68,7 @@ const ServicesSection: React.FC = () => {
         icon: 'Code',
         image: '',
         contactSubject: 'autre',
+        learnMoreUrl: '',
       }],
     }));
   };
@@ -180,6 +181,13 @@ const ServicesSection: React.FC = () => {
               value={activity.contactSubject || 'autre'}
               onChange={(v) => updateActivity(index, 'contactSubject', v)}
               options={SUBJECT_OPTIONS}
+            />
+
+            <FormField
+              label="Lien du bouton 'En savoir plus' (URL)"
+              value={activity.learnMoreUrl || ''}
+              onChange={(v) => updateActivity(index, 'learnMoreUrl', v)}
+              placeholder="https://... ou laisser vide pour masquer le bouton"
             />
 
             <StringListEditor label="Services inclus" items={activity.services}

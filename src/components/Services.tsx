@@ -53,6 +53,7 @@ const Services: React.FC = () => {
             const IconComponent = getIconComponent(activity.icon);
             const image = (activity as any).image as string | undefined;
             const contactSubject = (activity as any).contactSubject as string | undefined;
+            const learnMoreUrl = (activity as any).learnMoreUrl as string | undefined;
 
             return (
               <motion.div
@@ -100,20 +101,23 @@ const Services: React.FC = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-3">
-                    <motion.button
-                      className={`inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                        activity.color === 'orange'
-                          ? 'bg-accent hover-accent-light text-white'
-                          : activity.color === 'blue'
-                          ? 'bg-primary hover-primary-light text-white'
-                          : 'bg-purple-600 hover:bg-purple-700 text-white'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <span>En savoir plus</span>
-                      <ArrowRight size={20} />
-                    </motion.button>
+                    {learnMoreUrl && (
+                      <motion.a
+                        href={learnMoreUrl}
+                        className={`inline-flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                          activity.color === 'orange'
+                            ? 'bg-accent hover-accent-light text-white'
+                            : activity.color === 'blue'
+                            ? 'bg-primary hover-primary-light text-white'
+                            : 'bg-purple-600 hover:bg-purple-700 text-white'
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span>En savoir plus</span>
+                        <ArrowRight size={20} />
+                      </motion.a>
+                    )}
 
                     <motion.button
                       onClick={() => handleContactClick(contactSubject || 'autre')}
