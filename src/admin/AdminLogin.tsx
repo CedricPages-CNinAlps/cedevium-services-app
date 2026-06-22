@@ -7,10 +7,14 @@ const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!login(password)) {
+    setIsLoading(true);
+    const ok = await login(password);
+    setIsLoading(false);
+    if (!ok) {
       setError('Mot de passe incorrect');
       setPassword('');
     }
@@ -59,12 +63,13 @@ const AdminLogin: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full text-white font-bold py-3 px-6 rounded-lg transition-colors"
+            disabled={isLoading}
+            className="w-full text-white font-bold py-3 px-6 rounded-lg transition-colors disabled:opacity-60"
             style={{ background: '#DC582A' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#c24d24')}
+            onMouseEnter={e => !isLoading && (e.currentTarget.style.background = '#c24d24')}
             onMouseLeave={e => (e.currentTarget.style.background = '#DC582A')}
           >
-            Accéder au back office
+            {isLoading ? 'Vérification…' : 'Accéder au back office'}
           </button>
         </form>
 

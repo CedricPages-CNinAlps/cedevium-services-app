@@ -52,6 +52,7 @@ const Services: React.FC = () => {
           {activitiesData.activities.map((activity, index) => {
             const IconComponent = getIconComponent(activity.icon);
             const image = (activity as any).image as string | undefined;
+            const showIcon = (activity as any).showIcon !== false;
             const contactSubject = (activity as any).contactSubject as string | undefined;
             const learnMoreUrl = (activity as any).learnMoreUrl as string | undefined;
 
@@ -67,13 +68,13 @@ const Services: React.FC = () => {
               >
                 {/* Panneau coloré — icône + logo optionnel sur la même ligne */}
                 <div className={`md:w-1/3 ${getColorClasses(activity.color)} p-8 flex flex-col justify-center`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <IconComponent size={48} />
+                  <div className="mb-4">
+                    {showIcon && <IconComponent size={48} className={image ? 'mb-3' : ''} />}
                     {image && (
                       <img
                         src={image}
                         alt={`Logo ${activity.subtitle}`}
-                        className="h-12 w-auto object-contain max-w-[100px] rounded"
+                        className="h-24 w-auto object-contain max-w-[200px] rounded"
                         style={{ filter: 'brightness(0) invert(1)' }}
                       />
                     )}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, RotateCcw, LogOut, Settings, Image, Briefcase, Activity, Gamepad2, Phone, Navigation, Shield, ImageIcon, Mail, FileText, Menu, LayoutGrid, BarChart2 } from 'lucide-react';
+import { X, RotateCcw, LogOut, Settings, Image, Briefcase, Activity, Gamepad2, Phone, Navigation, Shield, ImageIcon, Mail, FileText, Menu, LayoutGrid, BarChart2, Upload } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
 import AdminLogin from './AdminLogin';
 import HeroSection from './sections/HeroSection';
@@ -35,13 +35,29 @@ const SECTIONS = [
 const GROUPS = ['Contenu', 'Identité', 'Médias', 'Paramètres'];
 
 const AdminPanel: React.FC = () => {
-  const { isAdminOpen, isAuthenticated, closeAdmin, logout, resetToDefaults } = useAdminData();
+  const { isAdminOpen, isAuthenticated, closeAdmin, logout, resetToDefaults,
+    heroData, activitiesData, gamesData, contactData, headerData, footerData,
+    images, customPages, emailConfig, logoConfig, portfolioData, trackingConfig } = useAdminData();
   const [activeSection, setActiveSection] = useState('hero');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [exported, setExported] = useState(false);
 
   if (!isAdminOpen) return null;
   if (!isAuthenticated) return <AdminLogin />;
+
+  const handleExport = () => {
+    const config = { heroData, activitiesData, gamesData, contactData, headerData, footerData, images, customPages, emailConfig, logoConfig, portfolioData, trackingConfig };
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'config.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    setExported(true);
+    setTimeout(() => setExported(false), 3000);
+  };
 
   const handleReset = () => {
     if (showResetConfirm) {
@@ -122,6 +138,17 @@ const AdminPanel: React.FC = () => {
       </nav>
 
       <div className="p-3 flex-shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <button onClick={handleExport}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm mb-1"
+          style={{ background: exported ? '#16a34a' : '#DC582A', color: 'white' }}>
+          <Upload size={15} />
+          <span className="font-semibold">{exported ? 'Téléchargé ✓' : 'Publier la configuration'}</span>
+        </button>
+        {exported && (
+          <p className="text-xs px-3 pb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Placez config.json dans public/, puis committez et déployez.
+          </p>
+        )}
         <button onClick={handleReset}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm"
           style={{ background: showResetConfirm ? '#dc2626' : 'transparent', color: showResetConfirm ? 'white' : 'rgba(255,255,255,0.5)' }}>

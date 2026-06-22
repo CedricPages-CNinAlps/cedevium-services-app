@@ -4,11 +4,13 @@ import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
 import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 import { PortfolioItem } from '../../contexts/AdminDataContext';
+import { uploadImage } from '../../utils/uploadImage';
 
 const PortfolioSection: React.FC = () => {
   const { portfolioData, updatePortfolioData } = useAdminData();
   const [local, setLocal] = useState(() => JSON.parse(JSON.stringify(portfolioData)));
   const [saved, setSaved] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const fileRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const updateHeader = (field: string, value: string) =>
@@ -39,10 +41,16 @@ const PortfolioSection: React.FC = () => {
     }));
   };
 
-  const handleImageUpload = (index: number, file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => updateItem(index, 'image', (e.target?.result as string) || '');
-    reader.readAsDataURL(file);
+  const handleImageUpload = async (index: number, file: File) => {
+    setUploadingIndex(index);
+    try {
+      const url = await uploadImage(file);
+      updateItem(index, 'image', url);
+    } catch (err: any) {
+      alert(err.message || "Erreur lors de l'upload.");
+    } finally {
+      setUploadingIndex(null);
+    }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -132,9 +140,10 @@ const PortfolioSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => fileRefs.current[index]?.click()}
-                  className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors whitespace-nowrap"
+                  disabled={uploadingIndex === index}
+                  className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors whitespace-nowrap disabled:opacity-50"
                 >
-                  <Upload size={15} /> Fichier
+                  <Upload size={15} /> {uploadingIndex === index ? 'Upload...' : 'Fichier'}
                 </button>
               </div>
             </div>

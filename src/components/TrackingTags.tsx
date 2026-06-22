@@ -8,17 +8,23 @@ declare global {
 }
 
 const TrackingTags: React.FC = () => {
-  const { trackingConfig } = useAdminData();
+  const { trackingConfig, remoteLoaded } = useAdminData();
   const initialized = useRef(false);
+  const configRef = useRef(trackingConfig);
+  configRef.current = trackingConfig;
 
   useEffect(() => {
+    if (!remoteLoaded) return;
     if (initialized.current) return;
+
+    let timer: ReturnType<typeof setInterval> | null = null;
 
     const initTAC = () => {
       const tac = window.tarteaucitron;
       if (!tac) return;
 
       initialized.current = true;
+      const config = configRef.current;
 
       tac.init({
         privacyUrl: '',
@@ -46,24 +52,27 @@ const TrackingTags: React.FC = () => {
         readmoreLink: '',
       });
 
-      if (trackingConfig.googleTagId) {
-        if (trackingConfig.googleTagId.startsWith('GTM-')) {
-          tac.user.googletagmanagerId = trackingConfig.googleTagId;
+      if (config.googleTagId) {
+        if (config.googleTagId.startsWith('GTM-')) {
+          tac.user.googletagmanagerId = config.googleTagId;
           (tac.job = tac.job || []).push('googletagmanager');
         } else {
-          tac.user.gtagUa = trackingConfig.googleTagId;
+          tac.user.gtagUa = config.googleTagId;
           (tac.job = tac.job || []).push('gtag');
         }
       }
 
-      if (trackingConfig.matomoUrl && trackingConfig.matomoSiteId) {
-        tac.user.matomoHost = trackingConfig.matomoUrl;
-        tac.user.matomoId = parseInt(trackingConfig.matomoSiteId, 10);
+      if (config.matomoUrl && config.matomoSiteId) {
+        tac.user.matomoHost = config.matomoUrl;
+        tac.user.matomoId = parseInt(config.matomoSiteId, 10);
         (tac.job = tac.job || []).push('matomo');
+      } else if (config.matomoSiteId) {
+        tac.user.matomoId = parseInt(config.matomoSiteId, 10);
+        (tac.job = tac.job || []).push('matomocloud');
       }
 
-      if (trackingConfig.matomoTagManagerUrl) {
-        tac.user.matomotmUrl = trackingConfig.matomoTagManagerUrl;
+      if (config.matomoTagManagerUrl) {
+        tac.user.matomotmUrl = config.matomoTagManagerUrl;
         (tac.job = tac.job || []).push('matomotm');
       }
     };
@@ -71,15 +80,18 @@ const TrackingTags: React.FC = () => {
     if (window.tarteaucitron) {
       initTAC();
     } else {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         if (window.tarteaucitron) {
-          clearInterval(timer);
+          clearInterval(timer!);
+          timer = null;
           initTAC();
         }
       }, 100);
-      setTimeout(() => clearInterval(timer), 5000);
+      setTimeout(() => { if (timer) clearInterval(timer); }, 5000);
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    return () => { if (timer) clearInterval(timer); };
+  }, [remoteLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };

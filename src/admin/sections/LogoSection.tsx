@@ -2,51 +2,49 @@ import React, { useState, useRef } from 'react';
 import { Upload, X } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, SectionCard, SaveButton } from '../AdminComponents';
+import { uploadImage } from '../../utils/uploadImage';
 
 const LogoSection: React.FC = () => {
   const { logoConfig, updateLogoConfig } = useAdminData();
   const [local, setLocal] = useState(() => JSON.parse(JSON.stringify(logoConfig)));
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
+  const [uploading, setUploading] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const faviconRef = useRef<HTMLInputElement>(null);
   const touchIconRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      setError('Fichier trop lourd (max 2 Mo). Compressez votre logo.');
-      return;
-    }
-    setError('');
-    const reader = new FileReader();
-    reader.onload = () => {
-      setLocal((prev: typeof logoConfig) => ({
-        ...prev,
-        type: 'image',
-        imageData: reader.result as string,
-      }));
-    };
-    reader.readAsDataURL(file);
     e.target.value = '';
+    setError('');
+    setUploading('logo');
+    try {
+      const url = await uploadImage(file);
+      setLocal((prev: typeof logoConfig) => ({ ...prev, type: 'image', imageData: url }));
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de l'upload du logo.");
+    } finally {
+      setUploading(null);
+    }
   };
 
   const clearLogo = () => {
     setLocal((prev: typeof logoConfig) => ({ ...prev, type: 'text', imageData: '' }));
   };
 
-  const handleIconUpload = (field: 'favicon' | 'appleTouchIcon', file: File) => {
-    if (file.size > 1 * 1024 * 1024) {
-      setError('Fichier trop lourd (max 1 Mo).');
-      return;
-    }
+  const handleIconUpload = async (field: 'favicon' | 'appleTouchIcon', file: File) => {
     setError('');
-    const reader = new FileReader();
-    reader.onload = () => {
-      setLocal((prev: typeof logoConfig) => ({ ...prev, [field]: reader.result as string }));
-    };
-    reader.readAsDataURL(file);
+    setUploading(field);
+    try {
+      const url = await uploadImage(file);
+      setLocal((prev: typeof logoConfig) => ({ ...prev, [field]: url }));
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de l'upload.");
+    } finally {
+      setUploading(null);
+    }
   };
 
   const handleSave = () => {
@@ -81,7 +79,12 @@ const LogoSection: React.FC = () => {
               onClick={() => fileRef.current?.click()}
               className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-[#DC582A] hover:bg-orange-50 transition-all"
             >
-              {local.imageData ? (
+              {uploading === 'logo' ? (
+                <div className="flex flex-col items-center gap-2 text-[#DC582A]">
+                  <Upload size={28} className="animate-bounce" />
+                  <span className="text-sm">Upload en cours...</span>
+                </div>
+              ) : local.imageData ? (
                 <div className="flex flex-col items-center gap-2">
                   <img src={local.imageData} alt="Logo" className="h-16 object-contain mx-auto" />
                   <span className="text-xs text-gray-400">Cliquer pour remplacer</span>
@@ -137,9 +140,9 @@ const LogoSection: React.FC = () => {
             ) : (
               <div className="w-8 h-8 bg-gray-100 border rounded flex items-center justify-center text-gray-300 text-xs">?</div>
             )}
-            <button type="button" onClick={() => faviconRef.current?.click()}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors">
-              <Upload size={15} /> Uploader
+            <button type="button" onClick={() => faviconRef.current?.click()} disabled={!!uploading}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors disabled:opacity-50">
+              <Upload size={15} /> {uploading === 'favicon' ? 'Upload...' : 'Uploader'}
             </button>
             <input ref={faviconRef} type="file" accept="image/*,.ico" className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) handleIconUpload('favicon', f); e.target.value = ''; }} />
@@ -163,9 +166,9 @@ const LogoSection: React.FC = () => {
             ) : (
               <div className="w-12 h-12 bg-gray-100 border rounded-xl flex items-center justify-center text-gray-300 text-xs">?</div>
             )}
-            <button type="button" onClick={() => touchIconRef.current?.click()}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors">
-              <Upload size={15} /> Uploader
+            <button type="button" onClick={() => touchIconRef.current?.click()} disabled={!!uploading}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors disabled:opacity-50">
+              <Upload size={15} /> {uploading === 'appleTouchIcon' ? 'Upload...' : 'Uploader'}
             </button>
             <input ref={touchIconRef} type="file" accept="image/*" className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; if (f) handleIconUpload('appleTouchIcon', f); e.target.value = ''; }} />

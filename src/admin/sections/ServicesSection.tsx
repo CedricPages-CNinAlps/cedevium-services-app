@@ -3,6 +3,7 @@ import { Plus, Trash2, Upload, X } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
 import { FormField, FormTextarea, FormSelect, StringListEditor, SectionCard, SaveButton } from '../AdminComponents';
 import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
+import { uploadImage } from '../../utils/uploadImage';
 
 const COLOR_OPTIONS = [
   { value: 'orange', label: 'Orange' },
@@ -30,6 +31,7 @@ const ServicesSection: React.FC = () => {
   const { activitiesData, updateActivitiesData } = useAdminData();
   const [local, setLocal] = useState(() => JSON.parse(JSON.stringify(activitiesData)));
   const [saved, setSaved] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const fileRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const updateHeader = (field: string, value: string) =>
@@ -44,12 +46,16 @@ const ServicesSection: React.FC = () => {
     }));
   };
 
-  const handleImageUpload = (index: number, file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      updateActivity(index, 'image', (e.target?.result as string) || '');
-    };
-    reader.readAsDataURL(file);
+  const handleImageUpload = async (index: number, file: File) => {
+    setUploadingIndex(index);
+    try {
+      const url = await uploadImage(file);
+      updateActivity(index, 'image', url);
+    } catch (err: any) {
+      alert(err.message || "Erreur lors de l'upload.");
+    } finally {
+      setUploadingIndex(null);
+    }
   };
 
   const addActivity = () => {
@@ -67,6 +73,7 @@ const ServicesSection: React.FC = () => {
         color: 'orange',
         icon: 'Code',
         image: '',
+        showIcon: true,
         contactSubject: 'autre',
         learnMoreUrl: '',
       }],
@@ -128,6 +135,16 @@ const ServicesSection: React.FC = () => {
               <FormSelect label="Icône" value={activity.icon} onChange={(v) => updateActivity(index, 'icon', v)} options={ICON_OPTIONS} />
             </div>
 
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={activity.showIcon !== false}
+                onChange={(e) => updateActivity(index, 'showIcon', e.target.checked as any)}
+                className="w-4 h-4 accent-[#DC582A]"
+              />
+              <span className="text-sm text-gray-700">Afficher l'icône sur la carte</span>
+            </label>
+
             {/* Image / Logo */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -167,9 +184,10 @@ const ServicesSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => fileRefs.current[index]?.click()}
-                  className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors"
+                  disabled={uploadingIndex === index}
+                  className="flex items-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg text-sm transition-colors disabled:opacity-50"
                 >
-                  <Upload size={15} /> Fichier
+                  <Upload size={15} /> {uploadingIndex === index ? 'Upload...' : 'Fichier'}
                 </button>
               </div>
               <p className="text-xs text-gray-400 mt-1">L'image sera affichée en blanc sur le fond coloré.</p>

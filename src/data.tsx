@@ -120,6 +120,7 @@ export const activitiesData = {
       color: "orange",
       icon: "Code",
       image: "",
+      showIcon: true,
       contactSubject: "developpement-web",
       learnMoreUrl: ""
     },
@@ -137,6 +138,7 @@ export const activitiesData = {
       color: "blue",
       icon: "Network",
       image: "",
+      showIcon: true,
       contactSubject: "services-entreprises",
       learnMoreUrl: ""
     },
@@ -154,6 +156,7 @@ export const activitiesData = {
       color: "orange",
       icon: "Palette",
       image: "",
+      showIcon: true,
       contactSubject: "conception-3d",
       learnMoreUrl: ""
     }
@@ -179,7 +182,7 @@ export const portfolioData = {
 export const trackingConfig = {
   googleTagId: "",
   matomoUrl: "",
-  matomoSiteId: "",
+  matomoSiteId: "1",
   matomoTagManagerUrl: "",
 };
 

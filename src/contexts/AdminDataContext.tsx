@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from 'react';
 import {
   heroData as defaultHeroData,
   servicesData as defaultServicesData,
@@ -14,14 +14,13 @@ import {
 } from '../data';
 
 const STORAGE_KEY = 'cedevium-admin-data';
-const PASSWORD_KEY = 'cedevium-admin-password';
-const DEFAULT_PASSWORD = 'nemmone8338';
+const DEFAULT_PASSWORD_HASH = 'fb5cdf69f87487522d3ea9ccc4d9b3c09e2c7027715f446207f5bf2fa887f2fc';
 
-export const getAdminPassword = (): string =>
-  localStorage.getItem(PASSWORD_KEY) || DEFAULT_PASSWORD;
-
-export const setAdminPassword = (password: string): void =>
-  localStorage.setItem(PASSWORD_KEY, password);
+async function hashPassword(password: string): Promise<string> {
+  const data = new TextEncoder().encode(password);
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export type HeroData = typeof defaultHeroData;
@@ -98,17 +97,19 @@ interface AdminState {
   logoConfig: LogoConfig;
   portfolioData: PortfolioData;
   trackingConfig: TrackingConfig;
+  passwordHash: string;
 }
 
 interface AdminDataContextType extends AdminState {
   isAdminOpen: boolean;
   isAuthenticated: boolean;
+  remoteLoaded: boolean;
   prefilledSubject: string;
   openAdmin: () => void;
   closeAdmin: () => void;
-  login: (password: string) => boolean;
+  login: (password: string) => Promise<boolean>;
   logout: () => void;
-  changePassword: (currentPwd: string, newPwd: string) => boolean;
+  changePassword: (currentPwd: string, newPwd: string) => Promise<boolean>;
   updateHeroData: (data: HeroData) => void;
   updateServicesData: (data: ServicesData) => void;
   updateActivitiesData: (data: ActivitiesData) => void;
@@ -143,6 +144,7 @@ const defaultAdminState: AdminState = {
   logoConfig: defaultLogoConfig,
   portfolioData: defaultPortfolioConfig,
   trackingConfig: defaultTracking,
+  passwordHash: DEFAULT_PASSWORD_HASH,
 };
 
 function deepClone<T>(obj: T): T {
@@ -156,29 +158,108 @@ function migrateActivities(stored: any) {
     ...stored.activitiesData,
     activities: stored.activitiesData.activities.map((a: any) => ({
       image: '',
+      showIcon: true,
       contactSubject: 'autre',
       ...a,
     })),
   };
 }
 
+function mergeState(base: AdminState, parsed: any): AdminState {
+  return {
+    ...deepClone(base),
+    ...parsed,
+    activitiesData: migrateActivities(parsed) || deepClone(defaultActivitiesData),
+    emailConfig: { ...defaultEmailConfig, ...(parsed.emailConfig || {}) },
+    logoConfig: { ...defaultLogoConfig, ...(parsed.logoConfig || {}) },
+    portfolioData: { ...defaultPortfolioConfig, ...(parsed.portfolioData || {}) },
+    trackingConfig: {
+      ...defaultTracking,
+      ...(parsed.trackingConfig || {}),
+      matomoSiteId: parsed.trackingConfig?.matomoSiteId || defaultTracking.matomoSiteId,
+    },
+    passwordHash: parsed.passwordHash || DEFAULT_PASSWORD_HASH,
+  };
+}
+
 function loadFromStorage(): AdminState {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return {
-        ...deepClone(defaultAdminState),
-        ...parsed,
-        activitiesData: migrateActivities(parsed) || deepClone(defaultActivitiesData),
-        emailConfig: { ...defaultEmailConfig, ...(parsed.emailConfig || {}) },
-        logoConfig: { ...defaultLogoConfig, ...(parsed.logoConfig || {}) },
-        portfolioData: { ...defaultPortfolioConfig, ...(parsed.portfolioData || {}) },
-        trackingConfig: { ...defaultTracking, ...(parsed.trackingConfig || {}) },
-      };
-    }
+    if (stored) return mergeState(defaultAdminState, JSON.parse(stored));
   } catch {}
   return deepClone(defaultAdminState);
+}
+
+// ── JSONBin.io remote sync ──────────────────────────────────────────────────
+const JSONBIN_BIN_ID = '6a343dd0da38895dfed92afa';
+const JSONBIN_API_KEY = '$2a$10$KTLyt2mS6ZlRvJDTdaGbU.ENIN3UwKAWWbks2SfI.wz0XqiHxA34u';
+
+function stripBase64(str: string): string {
+  return str?.startsWith('data:') ? '' : (str ?? '');
+}
+
+function stripBase64ForSync(state: AdminState): AdminState {
+  return {
+    ...state,
+    portfolioData: {
+      ...state.portfolioData,
+      items: state.portfolioData.items.map(item => ({
+        ...item,
+        image: stripBase64(item.image),
+      })),
+    },
+    logoConfig: {
+      ...state.logoConfig,
+      imageData: stripBase64(state.logoConfig.imageData),
+      favicon: stripBase64(state.logoConfig.favicon),
+      appleTouchIcon: stripBase64(state.logoConfig.appleTouchIcon),
+    },
+    activitiesData: {
+      ...state.activitiesData,
+      activities: (state.activitiesData.activities as any[]).map(a => ({
+        ...a,
+        image: stripBase64(a.image ?? ''),
+      })),
+    },
+  };
+}
+
+export async function loadFromJsonBin(): Promise<AdminState | null> {
+  try {
+    const res = await fetch(
+      `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`,
+      { headers: { 'X-Master-Key': JSONBIN_API_KEY } }
+    );
+    if (!res.ok) return null;
+    const { record } = await res.json();
+    return mergeState(defaultAdminState, record);
+  } catch {
+    return null;
+  }
+}
+
+async function saveToJsonBin(state: AdminState): Promise<void> {
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_API_KEY,
+      },
+      body: JSON.stringify(stripBase64ForSync(state)),
+    });
+  } catch {}
+}
+
+export async function loadConfigJson(): Promise<AdminState | null> {
+  try {
+    const res = await fetch('./config.json?v=' + Date.now());
+    if (!res.ok) return null;
+    const parsed = await res.json();
+    return mergeState(defaultAdminState, parsed);
+  } catch {
+    return null;
+  }
 }
 
 const AdminDataContext = createContext<AdminDataContextType | null>(null);
@@ -191,10 +272,42 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     () => sessionStorage.getItem('cedevium-admin-auth') === 'true'
   );
   const [prefilledSubject, setPrefilledSubject] = useState('');
+  const [remoteLoaded, setRemoteLoaded] = useState(false);
+  const isMounted = useRef(false);
+
+  // Au démarrage :
+  // - Admin : pousse son localStorage vers JSONBin.io (source de vérité à jour)
+  // - Visiteur : charge toujours depuis JSONBin.io (ignore le localStorage en cache)
+  useEffect(() => {
+    const isAdmin = sessionStorage.getItem('cedevium-admin-auth') === 'true';
+    if (isAdmin) {
+      saveToJsonBin(data);
+      setRemoteLoaded(true);
+    } else {
+      loadFromJsonBin().then(remote => {
+        if (remote) setData(remote);
+        setRemoteLoaded(true);
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
   }, [data]);
+
+  // Sauvegarde vers JSONBin.io (admin uniquement, avec debounce 2s après chaque modif)
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+    if (!isAuthenticated) return;
+    const timer = setTimeout(() => { saveToJsonBin(data); }, 2000);
+    return () => clearTimeout(timer);
+  }, [data, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Remove legacy plaintext password from localStorage
+  useEffect(() => { localStorage.removeItem('cedevium-admin-password'); }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -210,8 +323,9 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     setData(prev => ({ ...prev, [key]: value }));
   }
 
-  const login = (password: string): boolean => {
-    if (password === getAdminPassword()) {
+  const login = async (password: string): Promise<boolean> => {
+    const hash = await hashPassword(password);
+    if (hash === data.passwordHash) {
       setIsAuthenticated(true);
       sessionStorage.setItem('cedevium-admin-auth', 'true');
       return true;
@@ -225,9 +339,11 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     setIsAdminOpen(false);
   };
 
-  const changePassword = (currentPwd: string, newPwd: string): boolean => {
-    if (currentPwd !== getAdminPassword()) return false;
-    setAdminPassword(newPwd);
+  const changePassword = async (currentPwd: string, newPwd: string): Promise<boolean> => {
+    const currentHash = await hashPassword(currentPwd);
+    if (currentHash !== data.passwordHash) return false;
+    const newHash = await hashPassword(newPwd);
+    setData(prev => ({ ...prev, passwordHash: newHash }));
     return true;
   };
 
@@ -256,6 +372,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       ...data,
       isAdminOpen,
       isAuthenticated,
+      remoteLoaded,
       prefilledSubject,
       openAdmin: () => setIsAdminOpen(true),
       closeAdmin: () => setIsAdminOpen(false),
