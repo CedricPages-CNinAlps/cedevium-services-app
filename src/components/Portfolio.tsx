@@ -44,11 +44,8 @@ const Portfolio: React.FC = () => {
   const getAnimProps = (offset: number) => {
     const isCenter = offset === 0;
     return {
-      // x : ±72 % de la largeur propre de la carte
       x: `${offset * 72}%`,
-      // y : centrage vertical via -50 % de la hauteur propre
-      y: '-50%',
-      // Rotation 3D — cartes latérales de biais
+      y: 0,
       rotateY: offset * -48,
       scale: isCenter ? 1 : 0.78,
       opacity: isCenter ? 1 : 0.55,
@@ -98,7 +95,7 @@ const Portfolio: React.FC = () => {
                   width: '60%',
                   aspectRatio: '16 / 9',
                   left: '20%',
-                  top: '100%',
+                  top: '0',
                   cursor: !isCenter ? 'pointer' : item.url ? 'pointer' : 'default',
                 }}
                 animate={getAnimProps(offset)}

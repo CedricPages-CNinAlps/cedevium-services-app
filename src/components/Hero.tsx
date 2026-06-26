@@ -55,7 +55,7 @@ const Hero: React.FC = () => {
             </motion.h1>
             
             <motion.h2 
-              className="text-2xl md:text-3xl mb-6 text-gray-200"
+              className="text-2xl md:text-3xl mb-6 text-white"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -64,7 +64,7 @@ const Hero: React.FC = () => {
             </motion.h2>
             
             <motion.p 
-              className="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto"
+              className="text-lg md:text-xl mb-8 text-white max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}

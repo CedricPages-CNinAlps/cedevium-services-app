@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import CustomPage from './components/CustomPage';
 import AdminPanel from './admin/AdminPanel';
 import TrackingTags from './components/TrackingTags';
+import ScrollToTop from './components/ScrollToTop';
 import { AdminDataProvider, useAdminData } from './contexts/AdminDataContext';
 
 
@@ -49,6 +50,7 @@ function AppContent() {
       <Footer />
       <AdminPanel />
       <TrackingTags />
+      <ScrollToTop />
     </div>
   );
 }
