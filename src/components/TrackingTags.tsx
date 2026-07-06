@@ -62,12 +62,15 @@ const TrackingTags: React.FC = () => {
         }
       }
 
-      if (config.matomoUrl && config.matomoSiteId) {
-        tac.user.matomoHost = config.matomoUrl;
+      if (config.matomoSiteId) {
         tac.user.matomoId = parseInt(config.matomoSiteId, 10);
-        (tac.job = tac.job || []).push('matomo');
-      } else if (config.matomoSiteId) {
-        tac.user.matomoId = parseInt(config.matomoSiteId, 10);
+        if (config.matomoUrl) {
+          const host = config.matomoUrl.endsWith('/') ? config.matomoUrl : `${config.matomoUrl}/`;
+          tac.user.matomoHost = host;
+          // Le job "matomocloud" pointe par defaut vers cdn.matomo.cloud : on le redirige vers
+          // l'instance auto-hebergee, qui sert matomo.js (le job "matomo" utilise piwik.js/piwik.php, obsoletes).
+          tac.user.matomoCustomJSPath = `${host}matomo.js`;
+        }
         (tac.job = tac.job || []).push('matomocloud');
       }
 
