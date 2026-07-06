@@ -72,6 +72,23 @@ const TrackingTags: React.FC = () => {
           tac.user.matomoCustomJSPath = `${host}matomo.js`;
         }
         (tac.job = tac.job || []).push('matomocloud');
+
+        // Le service "matomocloud" s'affiche "Matomo Cloud" dans le bandeau de consentement par
+        // defaut ; ici c'est une instance auto-hebergee, on renomme le libelle affiche a l'utilisateur.
+        // tarteaucitron charge tarteaucitron.services.js de facon asynchrone, d'ou le sondage.
+        const renameMatomoCloudService = () => {
+          if (tac.services && tac.services.matomocloud) {
+            tac.services.matomocloud.name = 'Matomo (privacy by design)';
+            return true;
+          }
+          return false;
+        };
+        if (!renameMatomoCloudService()) {
+          const renameTimer = setInterval(() => {
+            if (renameMatomoCloudService()) clearInterval(renameTimer);
+          }, 100);
+          setTimeout(() => clearInterval(renameTimer), 5000);
+        }
       }
 
       if (config.matomoTagManagerUrl) {
