@@ -65,6 +65,28 @@ export const FormSelect: React.FC<FormSelectProps> = ({ label, value, onChange, 
   </div>
 );
 
+interface ToggleFieldProps {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  description?: string;
+}
+
+export const ToggleField: React.FC<ToggleFieldProps> = ({ label, checked, onChange, description }) => (
+  <label className="flex items-center gap-3 cursor-pointer py-1">
+    <div className="relative flex-shrink-0">
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
+      <div className={`w-11 h-6 rounded-full transition-colors ${checked ? 'bg-[#DC582A]' : 'bg-gray-300'}`}>
+        <div className={`w-4 h-4 bg-white rounded-full shadow absolute top-1 transition-transform ${checked ? 'translate-x-6' : 'translate-x-1'}`} />
+      </div>
+    </div>
+    <div>
+      <span className="text-sm font-medium text-gray-700">{label}</span>
+      {description && <p className="text-xs text-gray-400">{description}</p>}
+    </div>
+  </label>
+);
+
 interface StringListEditorProps {
   label: string;
   items: string[];

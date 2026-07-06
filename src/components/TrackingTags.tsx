@@ -26,31 +26,55 @@ const TrackingTags: React.FC = () => {
       initialized.current = true;
       const config = configRef.current;
 
-      tac.init({
-        privacyUrl: '',
-        bodyPosition: 'bottom',
-        hashtag: '#tarteaucitron',
-        cookieName: 'tarteaucitron',
-        orientation: 'bottom',
-        groupServices: false,
-        showAlertSmall: false,
-        cookieslist: true,
-        closePopup: false,
-        showIcon: true,
-        iconSrc: '',
-        iconPosition: 'BottomRight',
-        adblocker: false,
-        DenyAllCta: true,
-        AcceptAllCta: true,
-        highPrivacy: true,
-        handleBrowserDNTRequest: false,
-        removeCredit: false,
-        moreInfoLink: true,
-        useExternalCss: false,
-        useExternalJs: false,
+      const serviceDefaultState: boolean | 'wait' =
+        config.serviceDefaultState === 'true' ? true
+        : config.serviceDefaultState === 'false' ? false
+        : 'wait';
+
+      const tacOptions: Record<string, unknown> = {
+        privacyUrl: config.privacyUrl,
+        bodyPosition: config.bodyPosition,
+        hashtag: config.hashtag,
+        cookieName: config.cookieName,
+        orientation: config.orientation,
+        groupServices: config.groupServices,
+        showDetailsOnClick: config.showDetailsOnClick,
+        serviceDefaultState,
+        showAlertSmall: config.showAlertSmall,
+        showTitleBanner: config.showTitleBanner,
+        cookieslist: config.cookieslist,
+        cookieslistEmbed: config.cookieslistEmbed,
+        closePopup: config.closePopup,
+        showIcon: config.showIcon,
+        iconPosition: config.iconPosition,
+        adblocker: config.adblocker,
+        DenyAllCta: config.denyAllCta,
+        AcceptAllCta: config.acceptAllCta,
+        highPrivacy: config.highPrivacy,
+        alwaysNeedConsent: config.alwaysNeedConsent,
+        handleBrowserDNTRequest: config.handleBrowserDNTRequest,
+        removeCredit: config.removeCredit,
+        moreInfoLink: config.moreInfoLink,
+        useExternalCss: config.useExternalCss,
+        useExternalJs: config.useExternalJs,
+        readmoreLink: config.readmoreLink,
+        mandatory: config.mandatory,
+        mandatoryCta: config.mandatoryCta,
+        googleConsentMode: config.googleConsentMode,
+        bingConsentMode: config.bingConsentMode,
+        pianoConsentMode: config.pianoConsentMode,
+        pianoConsentModeEssential: config.pianoConsentModeEssential,
+        softConsentMode: config.softConsentMode,
+        dataLayer: config.dataLayer,
+        serverSide: config.serverSide,
+        partnersList: config.partnersList,
         locale: 'fr',
-        readmoreLink: '',
-      });
+      };
+      if (config.iconSrc) tacOptions.iconSrc = config.iconSrc;
+      if (config.cookieDomain) tacOptions.cookieDomain = config.cookieDomain;
+      if (config.customCloserId) tacOptions.customCloserId = config.customCloserId;
+
+      tac.init(tacOptions);
 
       if (config.googleTagId) {
         if (config.googleTagId.startsWith('GTM-')) {
@@ -64,30 +88,9 @@ const TrackingTags: React.FC = () => {
 
       if (config.matomoSiteId) {
         tac.user.matomoId = parseInt(config.matomoSiteId, 10);
+        (tac.job = tac.job || []).push('matomo');
         if (config.matomoUrl) {
-          const host = config.matomoUrl.endsWith('/') ? config.matomoUrl : `${config.matomoUrl}/`;
-          tac.user.matomoHost = host;
-          // Le job "matomocloud" pointe par defaut vers cdn.matomo.cloud : on le redirige vers
-          // l'instance auto-hebergee, qui sert matomo.js (le job "matomo" utilise piwik.js/piwik.php, obsoletes).
-          tac.user.matomoCustomJSPath = `${host}matomo.js`;
-        }
-        (tac.job = tac.job || []).push('matomocloud');
-
-        // Le service "matomocloud" s'affiche "Matomo Cloud" dans le bandeau de consentement par
-        // defaut ; ici c'est une instance auto-hebergee, on renomme le libelle affiche a l'utilisateur.
-        // tarteaucitron charge tarteaucitron.services.js de facon asynchrone, d'ou le sondage.
-        const renameMatomoCloudService = () => {
-          if (tac.services && tac.services.matomocloud) {
-            tac.services.matomocloud.name = 'Matomo (privacy by design)';
-            return true;
-          }
-          return false;
-        };
-        if (!renameMatomoCloudService()) {
-          const renameTimer = setInterval(() => {
-            if (renameMatomoCloudService()) clearInterval(renameTimer);
-          }, 100);
-          setTimeout(() => clearInterval(renameTimer), 5000);
+          tac.user.matomoHost = config.matomoUrl.endsWith('/') ? config.matomoUrl : `${config.matomoUrl}/`;
         }
       }
 
