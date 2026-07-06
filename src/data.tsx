@@ -21,7 +21,7 @@ export const colors = {
 // Images du site
 export const images = {
   hero: {
-    background: '/cedevium-services-app/bonhomme-courses.jpg',
+    background: '/bonhomme-courses.jpg',
     logo: '/logo192.png',
     favicon: '/favicon.ico'
   },
@@ -255,7 +255,7 @@ export const contactData = {
       {
         type: "location",
         title: "Localisation",
-        content: "France",
+        content: "29 chemin du Vieux Chêne, 38240 Meylan",
         action: "#",
         icon: "MapPin"
       }
@@ -313,7 +313,7 @@ export const footerData = {
     info: [
       { type: "email", content: "contact@cedevium-services.fr", icon: "Mail" },
       { type: "phone", content: "+33 6 00 00 00 00", icon: "Phone" },
-      { type: "location", content: "France", icon: "MapPin" }
+      { type: "location", content: "29 chemin du Vieux Chêne, 38240 Meylan", icon: "MapPin" }
     ]
   },
   copyright: "© 2024 Cedevium Services. Développé par Cedevium Services"
@@ -439,7 +439,7 @@ export const gamesData = {
 export const siteConfig = {
   name: "Cedevium Services",
   description: "Votre partenaire pour le développement web, les services entreprises et la conception 3D",
-  url: "https://cedricpages-cninalps.github.io/cedevium-services-app",
+  url: "https://cedevium-services.fr",
   author: "Cedevium Services"
 };
 

@@ -11,34 +11,50 @@
     />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Cedevium Services" />
+    <link rel="canonical" href="https://cedevium-services.fr/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Cedevium Services" />
     <meta property="og:description" content="Développement Web & SaaS, Services Entreprises, Conception 3D." />
-    <meta property="og:url" content="https://cedricpages-cninalps.github.io/cedevium-services-app" />
+    <meta property="og:url" content="https://cedevium-services.fr/" />
+    <meta property="og:site_name" content="Cedevium Services" />
+    <meta property="og:image" content="https://cedevium-services.fr/logo-cedevium-services.jpg" />
     <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cedevium Services" />
+    <meta name="twitter:description" content="Développement Web & SaaS, Services Entreprises, Conception 3D." />
+    <meta name="twitter:image" content="https://cedevium-services.fr/logo-cedevium-services.jpg" />
 
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-cedevium-services.jpg" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
     <title>Cedevium Services</title>
 
-    <!-- ═══ Schema.org / JSON-LD (SEO) ═══ -->
+    <!-- ═══ Schema.org / JSON-LD (SEO + GEO) ═══ -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
           "@type": "Organization",
-          "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization",
+          "@id": "https://cedevium-services.fr/#organization",
           "name": "Cedevium Services",
-          "url": "https://cedricpages-cninalps.github.io/cedevium-services-app",
+          "url": "https://cedevium-services.fr/",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://cedricpages-cninalps.github.io/cedevium-services-app/logo-cedevium-services.jpg"
+            "url": "https://cedevium-services.fr/logo-cedevium-services.jpg"
           },
           "description": "Développement Web & SaaS, Services Entreprises et Conception 3D pour professionnels et particuliers.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "29 chemin du Vieux Chêne",
+            "postalCode": "38240",
+            "addressLocality": "Meylan",
+            "addressCountry": "FR"
+          },
           "areaServed": {
             "@type": "Country",
             "name": "France"
@@ -48,34 +64,32 @@
             "contactType": "customer service",
             "email": "contact@cedevium-services.fr",
             "availableLanguage": "French"
-          },
-          "sameAs": []
+          }
         },
         {
           "@type": "WebSite",
-          "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#website",
-          "url": "https://cedricpages-cninalps.github.io/cedevium-services-app",
+          "@id": "https://cedevium-services.fr/#website",
+          "url": "https://cedevium-services.fr/",
           "name": "Cedevium Services",
           "inLanguage": "fr-FR",
           "publisher": {
-            "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
-          },
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-              "@type": "EntryPoint",
-              "urlTemplate": "https://cedricpages-cninalps.github.io/cedevium-services-app/?s={search_term_string}"
-            },
-            "query-input": "required name=search_term_string"
+            "@id": "https://cedevium-services.fr/#organization"
           }
         },
         {
           "@type": "ProfessionalService",
-          "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#business",
+          "@id": "https://cedevium-services.fr/#business",
           "name": "Cedevium Services",
-          "url": "https://cedricpages-cninalps.github.io/cedevium-services-app",
-          "image": "https://cedricpages-cninalps.github.io/cedevium-services-app/logo-cedevium-services.jpg",
+          "url": "https://cedevium-services.fr/",
+          "image": "https://cedevium-services.fr/logo-cedevium-services.jpg",
           "description": "Votre partenaire pour le développement web, les services entreprises et la conception 3D.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "29 chemin du Vieux Chêne",
+            "postalCode": "38240",
+            "addressLocality": "Meylan",
+            "addressCountry": "FR"
+          },
           "areaServed": "FR",
           "currenciesAccepted": "EUR",
           "priceRange": "€€",
@@ -90,7 +104,7 @@
                   "name": "Développement Web & SaaS",
                   "description": "Création de sites internet, applications web, plateformes SaaS et automatisation de processus réglementaires de génération de documents.",
                   "provider": {
-                    "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+                    "@id": "https://cedevium-services.fr/#organization"
                   }
                 }
               },
@@ -101,7 +115,7 @@
                   "name": "Services Entreprises",
                   "description": "Prestation de services divers pour des entreprises : aide, communication, services web et animation d'événements de groupe.",
                   "provider": {
-                    "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+                    "@id": "https://cedevium-services.fr/#organization"
                   }
                 }
               },
@@ -112,12 +126,50 @@
                   "name": "Conception 3D",
                   "description": "Aide à la conception 3D sur logiciels d'aménagement professionnels (cuisine, dressing) pour professionnels et particuliers, sans activité de montage.",
                   "provider": {
-                    "@id": "https://cedricpages-cninalps.github.io/cedevium-services-app/#organization"
+                    "@id": "https://cedevium-services.fr/#organization"
                   }
                 }
               }
             ]
           }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://cedevium-services.fr/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Quels sont les domaines d'activité de Cedevium Services ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cedevium Services intervient sur trois pôles complémentaires : le Développement Web & SaaS (création et refonte de sites internet, applications web, automatisation de processus documentaires), les Services Entreprises (aide aux activités, communication, services web, animation d'événements de groupe) et la Conception 3D (aménagement professionnel de cuisines et dressings, sans activité de montage)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Cedevium Services propose-t-il un service de montage pour la conception 3D ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Non, Cedevium Services propose uniquement l'aide à la conception 3D sur des logiciels d'aménagement professionnels (cuisine, dressing), sans activité de montage."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Dans quelle zone géographique Cedevium Services intervient-il ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cedevium Services est basé à Meylan, en Isère, et intervient auprès de professionnels et de particuliers sur l'ensemble de la France."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment contacter Cedevium Services ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cedevium Services est joignable par email à contact@cedevium-services.fr ou via le formulaire de contact disponible sur le site cedevium-services.fr."
+              }
+            }
+          ]
         }
       ]
     }
@@ -135,7 +187,19 @@
     ></script>
   </head>
   <body>
-    <noscript>Vous devez activer JavaScript pour utiliser ce site.</noscript>
+    <noscript>
+      <h1>Cedevium Services — Meylan, Isère</h1>
+      <p>Développement Web &amp; SaaS, Services Entreprises et Conception 3D pour professionnels et particuliers, dans toute la France.</p>
+      <h2>Nos activités</h2>
+      <ul>
+        <li><strong>Développement Web &amp; SaaS</strong> : création de sites internet, applications web, plateformes SaaS et automatisation de processus réglementaires de génération de documents.</li>
+        <li><strong>Services Entreprises</strong> : aide sur vos activités, services de communication, services web pour entreprises, événements de groupe et animation.</li>
+        <li><strong>Conception 3D</strong> : aide à la conception 3D sur logiciels d'aménagement professionnels (cuisine, dressing) pour professionnels et particuliers, sans activité de montage.</li>
+      </ul>
+      <h2>Contact</h2>
+      <p>29 chemin du Vieux Chêne, 38240 Meylan, France — <a href="mailto:contact@cedevium-services.fr">contact@cedevium-services.fr</a></p>
+      <p>Vous devez activer JavaScript pour utiliser l'ensemble des fonctionnalités de ce site.</p>
+    </noscript>
     <div id="root"></div>
   </body>
 </html>

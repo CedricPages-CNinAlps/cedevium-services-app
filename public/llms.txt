@@ -1,0 +1,21 @@
+# Cedevium Services
+
+> Cedevium Services est une entreprise basée à Meylan (Isère, France) proposant du développement web & SaaS, des services aux entreprises et de la conception 3D, pour des professionnels et des particuliers dans toute la France.
+
+## Activités
+
+- **Développement Web & SaaS** : création de sites internet, applications web, plateformes SaaS et automatisation de processus réglementaires de génération de documents. Création, refonte et maintenance de sites internet.
+- **Services Entreprises** : aide sur les activités des entreprises, services de communication, services web, événements de groupe et animation.
+- **Conception 3D** : aide à la conception 3D sur logiciels d'aménagement professionnels (cuisine, dressing) pour professionnels et particuliers. Cedevium Services ne réalise pas l'activité de montage.
+
+## Contact
+
+- Adresse : 29 chemin du Vieux Chêne, 38240 Meylan, France
+- Email : contact@cedevium-services.fr
+- Site : https://cedevium-services.fr/
+
+## Pages
+
+- Accueil : https://cedevium-services.fr/
+- Conditions Générales de Vente : https://cedevium-services.fr/?page=cgv
+- Conditions Générales d'Utilisation : https://cedevium-services.fr/?page=cgu

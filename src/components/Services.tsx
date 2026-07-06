@@ -73,7 +73,7 @@ const Services: React.FC = () => {
                     {image && (
                       <img
                         src={image}
-                        alt={`Logo ${activity.subtitle}`}
+                        alt={`Logo ${activity.title} — ${activity.subtitle}`}
                         className="h-24 w-auto object-contain max-w-[200px] rounded"
                         style={{ filter: 'brightness(0) invert(1)' }}
                       />
