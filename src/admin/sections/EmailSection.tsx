@@ -109,6 +109,8 @@ const EmailSection: React.FC = () => {
           <FormField label="Template ID (confirmation client)" value={local.confirmationTemplateId} onChange={(v) => update('confirmationTemplateId', v)} placeholder="template_xxxxxxx" />
           <FormField label="Public Key" value={local.publicKey} onChange={(v) => update('publicKey', v)} placeholder="xxxxxxxxxxxxxxxxxxxx" />
           <FormField label="Email de réception" value={local.recipientEmail} onChange={(v) => update('recipientEmail', v)} placeholder="contact@cedevium-services.fr" type="email" />
+          <FormField label="reCAPTCHA v2 Site Key (vide = désactivé)" value={local.recaptchaSiteKey} onChange={(v) => update('recaptchaSiteKey', v)} placeholder="6Lxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+          <p className="text-xs text-gray-500">Créez une clé « reCAPTCHA v2 – case à cocher » sur google.com/recaptcha/admin, puis collez la <strong>Secret Key</strong> dans EmailJS → template de notification → Settings → reCAPTCHA. Le test d'envoi ci-dessous échouera tant que reCAPTCHA est actif sur ce template.</p>
         </div>
       </SectionCard>
 

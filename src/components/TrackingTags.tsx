@@ -8,10 +8,12 @@ declare global {
 }
 
 const TrackingTags: React.FC = () => {
-  const { trackingConfig, remoteLoaded } = useAdminData();
+  const { trackingConfig, emailConfig, remoteLoaded } = useAdminData();
   const initialized = useRef(false);
   const configRef = useRef(trackingConfig);
   configRef.current = trackingConfig;
+  const recaptchaKeyRef = useRef(emailConfig.recaptchaSiteKey);
+  recaptchaKeyRef.current = emailConfig.recaptchaSiteKey;
 
   useEffect(() => {
     if (!remoteLoaded) return;
@@ -97,6 +99,20 @@ const TrackingTags: React.FC = () => {
       if (config.matomoTagManagerUrl) {
         tac.user.matomotmUrl = config.matomoTagManagerUrl;
         (tac.job = tac.job || []).push('matomotm');
+      }
+
+      // Own key so tarteaucitron's built-in 'recaptcha' service (implicit render) doesn't override it; Contact.tsx renders via onRecaptchaLoad.
+      if (recaptchaKeyRef.current) {
+        tac.services.recaptchacontact = {
+          key: 'recaptchacontact',
+          type: 'api',
+          name: 'reCAPTCHA (formulaire de contact)',
+          uri: 'https://policies.google.com/privacy',
+          needConsent: true,
+          cookies: ['_GRECAPTCHA'],
+          js: () => tac.addScript('https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit&hl=fr'),
+        };
+        (tac.job = tac.job || []).push('recaptchacontact');
       }
     };
 

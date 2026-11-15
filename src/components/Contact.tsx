@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
@@ -16,6 +16,31 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [renderedAt] = useState(() => Date.now());
+  const recaptchaRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<number | null>(null);
+  const siteKey = emailConfig.recaptchaSiteKey;
+
+  const [recaptchaReady, setRecaptchaReady] = useState(false);
+
+  // The script is loaded by tarteaucitron (TrackingTags) once the visitor consents; re-render the widget when the form remounts.
+  useEffect(() => {
+    if (!siteKey || isSubmitted) return;
+    const w = window as any;
+    const render = () => {
+      if (recaptchaRef.current && !recaptchaRef.current.hasChildNodes()) {
+        widgetId.current = w.grecaptcha.render(recaptchaRef.current, { sitekey: siteKey });
+        setRecaptchaReady(true);
+      }
+    };
+    w.onRecaptchaLoad = render;
+    if (w.grecaptcha?.render) render();
+  }, [siteKey, isSubmitted]);
+
+  const resetRecaptcha = () => {
+    if (widgetId.current !== null) (window as any).grecaptcha?.reset(widgetId.current);
+  };
 
   useEffect(() => {
     if (prefilledSubject) {
@@ -35,7 +60,22 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (emailConfig.enabled && emailConfig.serviceId && emailConfig.templateId && emailConfig.publicKey) {
+    // Bot: hidden field filled or form submitted faster than a human could. Fake success so the bot doesn't retry.
+    const isBot = honeypot !== '' || Date.now() - renderedAt < 3000;
+
+    const recaptchaToken = siteKey && widgetId.current !== null
+      ? (window as any).grecaptcha?.getResponse(widgetId.current) ?? ''
+      : '';
+    if (!isBot && siteKey && !recaptchaToken) {
+      setIsSubmitting(false);
+      setSubmitError(recaptchaReady
+        ? 'Veuillez cocher la case « Je ne suis pas un robot ».'
+        : 'Pour envoyer le formulaire, autorisez reCAPTCHA dans la gestion des cookies.');
+      setTimeout(() => setSubmitError(''), 6000);
+      return;
+    }
+
+    if (!isBot && emailConfig.enabled && emailConfig.serviceId && emailConfig.templateId && emailConfig.publicKey) {
       const subjectLabel = contactData.form.fields.subject.options.find(o => o.value === formData.subject)?.label ?? formData.subject;
       const time = new Date().toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short' });
       const templateVars = {
@@ -54,9 +94,12 @@ const Contact: React.FC = () => {
       };
 
       try {
-        await emailjs.send(emailConfig.serviceId, emailConfig.templateId, templateVars, emailConfig.publicKey);
+        // A reCAPTCHA token is single-use, so only the notification template can verify it.
+        await emailjs.send(emailConfig.serviceId, emailConfig.templateId,
+          { ...templateVars, 'g-recaptcha-response': recaptchaToken }, emailConfig.publicKey);
       } catch (err: any) {
         console.error('EmailJS error (admin):', err);
+        resetRecaptcha();
         setIsSubmitting(false);
         setSubmitError("Une erreur est survenue lors de l'envoi. Veuillez réessayer ou nous contacter directement.");
         setTimeout(() => setSubmitError(''), 6000);
@@ -143,6 +186,19 @@ const Contact: React.FC = () => {
             <h3 className="text-2xl font-bold mb-6 text-primary">{contactData.form.title}</h3>
             
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px' }}>
+                <label>
+                  Ne pas remplir
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={e => setHoneypot(e.target.value)}
+                  />
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -222,6 +278,20 @@ const Contact: React.FC = () => {
                   placeholder={contactData.form.fields.message.placeholder}
                 />
               </div>
+
+              {siteKey && <div ref={recaptchaRef} />}
+              {siteKey && !recaptchaReady && (
+                <p className="text-sm text-gray-600">
+                  Ce formulaire est protégé par reCAPTCHA (Google).{' '}
+                  <button
+                    type="button"
+                    className="underline text-accent"
+                    onClick={() => window.tarteaucitron?.userInterface.openPanel()}
+                  >
+                    Autoriser reCAPTCHA
+                  </button>
+                </p>
+              )}
 
               {submitError && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm">

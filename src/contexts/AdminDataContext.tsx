@@ -51,6 +51,7 @@ export interface EmailConfig {
   confirmationTemplateId: string;
   publicKey: string;
   recipientEmail: string;
+  recaptchaSiteKey: string;
 }
 
 export interface LogoConfig {
@@ -73,6 +74,7 @@ const defaultEmailConfig: EmailConfig = {
   confirmationTemplateId: '',
   publicKey: '',
   recipientEmail: '',
+  recaptchaSiteKey: '',
 };
 
 const defaultLogoConfig: LogoConfig = {
