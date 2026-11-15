@@ -90,11 +90,13 @@ const Hero: React.FC = () => {
             )}
           </motion.div>
         </AnimatePresence>
+      </div>
 
-        {/* Slider Controls */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-10">
+      {/* Slider Controls: anchored to the section, not the text block, so they don't move with text length */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-10 text-white">
           <button
             onClick={prevSlide}
+            aria-label="Slide précédente"
             className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
           >
             <ChevronRight className="rotate-180" size={24} />
@@ -105,6 +107,7 @@ const Hero: React.FC = () => {
               <button
                 key={heroData.slides[index].id}
                 onClick={() => setCurrentSlide(index)}
+                aria-label={`Aller à la slide ${index + 1}`}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentSlide ? 'bg-blue-night w-8' : 'bg-white/50'
                 }`}
@@ -114,11 +117,11 @@ const Hero: React.FC = () => {
           
           <button
             onClick={nextSlide}
+            aria-label="Slide suivante"
             className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
           >
             <ChevronRight size={24} />
           </button>
-        </div>
       </div>
     </section>
   );
