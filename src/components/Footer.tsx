@@ -14,7 +14,16 @@ const Footer: React.FC = () => {
     }
   };
   return (
-    <footer className={`bg-primary text-white py-8`}>
+    <footer className="relative bg-blue-night text-white pt-12 pb-8">
+      {/* Vague de transition avec la section précédente */}
+      <svg
+        className="absolute bottom-full left-0 w-full h-12 md:h-20 text-blue-night"
+        viewBox="0 0 1440 80"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path fill="currentColor" d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,40 L1440,80 L0,80 Z" />
+      </svg>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
@@ -48,7 +57,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-2">
               {footerData.quickLinks.links.map((link, index) => (
                 <li key={index}>
-                  <a href={link.href} className={`text-gray-300 hover:text-accent transition-colors`}>
+                  <a href={link.href} className="link-underline text-gray-300 hover:text-orange transition-colors">
                     {link.name}
                   </a>
                 </li>

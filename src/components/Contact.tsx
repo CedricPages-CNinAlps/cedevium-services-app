@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { useAdminData } from '../contexts/AdminDataContext';
+import SectionTitle from '../animations/SectionTitle';
 
 const Contact: React.FC = () => {
   const { contactData, emailConfig, prefilledSubject, setPrefilledSubject } = useAdminData();
@@ -159,29 +160,20 @@ const Contact: React.FC = () => {
   }
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Contactez <span className="text-accent">Nous</span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {contactData.subtitle}
-          </p>
-        </motion.div>
+    <section id="contact" className="relative py-24 pb-32 bg-gray-50 overflow-hidden">
+      <div className="pointer-events-none absolute -top-24 right-1/4 h-80 w-80 rounded-full bg-orange/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 -left-32 h-96 w-96 rounded-full bg-blue-night/10 blur-3xl" />
+      <div className="relative container mx-auto px-4">
+        <SectionTitle eyebrow="Parlons de votre projet" lead="Contactez" highlight="Nous" subtitle={contactData.subtitle} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
           <motion.div
-            className="bg-white rounded-xl shadow-lg p-8"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+            className="bg-white rounded-3xl shadow-xl ring-1 ring-black/5 p-8 md:p-10"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <h3 className="text-2xl font-bold mb-6 text-primary">{contactData.form.title}</h3>
             
@@ -302,19 +294,21 @@ const Contact: React.FC = () => {
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-accent hover-accent-light text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                className="group/send relative w-full overflow-hidden bg-orange border-2 border-orange enabled:hover:border-blue-night text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
+                {/* Remplissage bleu nuit qui glisse de gauche à droite au survol */}
+                <span className={`absolute inset-0 origin-left scale-x-0 bg-blue-night transition-transform duration-300 ease-out ${isSubmitting ? '' : 'group-hover/send:scale-x-100'}`} />
                 {isSubmitting ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    <span>{contactData.form.submitButton.loadingText}</span>
+                    <div className="relative animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span className="relative">{contactData.form.submitButton.loadingText}</span>
                   </>
                 ) : (
                   <>
-                    <Send size={20} />
-                    <span>{contactData.form.submitButton.text}</span>
+                    <Send size={20} className="relative transition-transform duration-300 group-hover/send:translate-x-1 group-hover/send:-translate-y-0.5" />
+                    <span className="relative">{contactData.form.submitButton.text}</span>
                   </>
                 )}
               </motion.button>
@@ -324,9 +318,10 @@ const Contact: React.FC = () => {
           {/* Contact Info */}
           <motion.div
             className="space-y-8"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
             <div>
               <h3 className={`text-2xl font-bold mb-6 text-primary`}>{contactData.info.title}</h3>
@@ -338,13 +333,13 @@ const Contact: React.FC = () => {
                     <motion.a
                       key={info.title}
                       href={info.action}
-                      className="flex items-start space-x-4 p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-300 group"
+                      className="flex items-start space-x-4 p-5 bg-white rounded-2xl shadow ring-1 ring-black/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                      <div className={`w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-accent/20 transition-colors duration-300`}>
-                        <IconComponent size={24} className={`text-accent`} />
+                      <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-orange group-hover:rotate-6 transition-all duration-300">
+                        <IconComponent size={24} className="text-orange group-hover:text-white transition-colors duration-300" />
                       </div>
                       <div>
                         <h4 className={`font-semibold text-primary mb-1`}>{info.title}</h4>
@@ -356,7 +351,9 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            <div className={`bg-primary text-white p-6 rounded-lg`}>
+            <div className="animated-border rounded-2xl">
+            <div className="relative overflow-hidden bg-blue-night text-white p-7 rounded-2xl">
+              <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-orange/20 blur-2xl" />
               <h4 className="text-xl font-bold mb-3">{contactData.whyChooseUs.title}</h4>
               <ul className="space-y-2 text-gray-200">
                 {contactData.whyChooseUs.points.map((point, index) => (
@@ -366,6 +363,7 @@ const Contact: React.FC = () => {
                   </li>
                 ))}
               </ul>
+            </div>
             </div>
           </motion.div>
         </div>

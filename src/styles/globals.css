@@ -114,3 +114,92 @@
 .bullet-primary {
   background-color: var(--color-primary);
 }
+
+/* ===== Animations (branche feature/animations-web) ===== */
+
+/* Hero : zoom lent sur l'image de fond */
+.hero-kenburns {
+  animation: hero-kenburns 24s ease-in-out infinite alternate;
+  transform-origin: 60% 40%;
+}
+@keyframes hero-kenburns {
+  from { transform: scale(1.05); }
+  to   { transform: scale(1.18) translate3d(-1.5%, -1%, 0); }
+}
+
+/* Hero : vagues blanches translucides, chaque couche à sa vitesse */
+.hero-waves use { animation: hero-wave 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite; }
+.hero-waves use:nth-child(1) { animation-delay: -2s;  animation-duration: 7s; }
+.hero-waves use:nth-child(2) { animation-delay: -3s;  animation-duration: 10s; }
+.hero-waves use:nth-child(3) { animation-delay: -4s;  animation-duration: 13s; }
+.hero-waves use:nth-child(4) { animation-delay: -5s;  animation-duration: 20s; }
+@keyframes hero-wave {
+  0%   { transform: translate3d(-90px, 0, 0); }
+  100% { transform: translate3d(85px, 0, 0); }
+}
+
+/* Hero : ombre portée du texte, pour rester lisible sans voile sombre */
+.hero-text-shadow { text-shadow: 0 2px 20px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.35); }
+
+/* Hero : barre de progression du slide actif */
+.hero-progress {
+  width: 0;
+  animation-name: hero-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes hero-progress { to { width: 100%; } }
+
+/* Hero : trait animé de l'indicateur « Défiler » */
+.hero-scroll-line { animation: hero-scroll-line 2s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+@keyframes hero-scroll-line {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(200%); }
+}
+
+/* Lent flottement (emojis, icônes décoratives) */
+.float-slow { animation: float-slow 5s ease-in-out infinite; }
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Rotation très lente des icônes en filigrane */
+.spin-very-slow { animation: spin-very-slow 60s linear infinite; }
+@keyframes spin-very-slow { to { transform: rotate(360deg); } }
+
+/* Bordure en dégradé animé (encadré « Pourquoi nous choisir ») */
+.animated-border {
+  position: relative;
+  isolation: isolate;
+}
+.animated-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #DC582A, #1E1A34, #6d4bd1, #DC582A);
+  background-size: 300% 300%;
+  animation: gradient-shift 8s ease infinite;
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* Lien souligné qui se dessine au survol */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+}
+.link-underline:hover { background-size: 100% 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns, .hero-scroll-line, .float-slow, .spin-very-slow, .hero-waves use,
+  .animated-border::before { animation: none; }
+  .hero-progress { animation: none; width: 100%; }
+}

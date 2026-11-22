@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, Code, Briefcase, Home, Mail, Gamepad2 } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
@@ -7,7 +7,17 @@ const Header: React.FC = () => {
   const { headerData, logoConfig } = useAdminData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const solid = scrolled || isMenuOpen;
 
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
@@ -21,9 +31,15 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 w-full bg-primary text-white z-50 shadow-lg`}>
+    <header
+      className={`fixed top-0 w-full text-white z-50 transition-all duration-500 ${
+        solid
+          ? 'bg-blue-night/85 backdrop-blur-md shadow-lg'
+          : 'bg-transparent hover:bg-blue-night/85 hover:backdrop-blur-md hover:shadow-lg'
+      }`}
+    >
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className={`flex justify-between items-center transition-all duration-500 ${scrolled ? 'h-16' : 'h-20'}`}>
           {/* Logo */}
           <motion.div 
             className="flex items-center space-x-2"
@@ -49,13 +65,14 @@ const Header: React.FC = () => {
                 <motion.a
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center space-x-1 hover-text-accent transition-colors duration-300`}
+                  className="group relative flex items-center space-x-1 py-1 hover-text-accent transition-colors duration-300"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <IconComponent size={18} />
                   <span>{item.name}</span>
+                  <span className="absolute left-0 -bottom-0.5 h-0.5 w-full origin-left scale-x-0 bg-orange transition-transform duration-300 group-hover:scale-x-100" />
                 </motion.a>
               );
             })}

@@ -168,7 +168,7 @@ const AdminPanel: React.FC = () => {
   );
 
   return (
-    <div className="fixed inset-0 z-[1000] flex" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div data-lenis-prevent className="fixed inset-0 z-[1000] flex" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
 
       {/* Overlay mobile */}
       {sidebarOpen && (

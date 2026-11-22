@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import { scrollToTop } from '../animations/motion';
 
 const ScrollToTop: React.FC = () => {
   const [visible, setVisible] = useState(false);
@@ -19,7 +20,7 @@ const ScrollToTop: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={scrollToTop}
           className="fixed left-4 bottom-8 z-50 w-11 h-11 rounded-full bg-primary hover:bg-accent text-white shadow-lg flex items-center justify-center transition-colors duration-200"
           aria-label="Retour en haut"
         >

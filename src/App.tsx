@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { MotionConfig } from 'framer-motion';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -11,6 +12,8 @@ import CustomPage from './components/CustomPage';
 import AdminPanel from './admin/AdminPanel';
 import TrackingTags from './components/TrackingTags';
 import ScrollToTop from './components/ScrollToTop';
+import SmoothScroll from './animations/SmoothScroll';
+import ScrollProgress from './animations/ScrollProgress';
 import { AdminDataProvider, useAdminData } from './contexts/AdminDataContext';
 
 
@@ -39,7 +42,10 @@ function AppContent() {
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="App">
+      <SmoothScroll />
+      <ScrollProgress />
       <Header />
       <Hero />
       <Activities />
@@ -52,6 +58,7 @@ function AppContent() {
       <TrackingTags />
       <ScrollToTop />
     </div>
+    </MotionConfig>
   );
 }
 

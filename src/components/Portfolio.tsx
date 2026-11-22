@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useAdminData } from '../contexts/AdminDataContext';
+import SectionTitle from '../animations/SectionTitle';
+import ShaderBackground from '../animations/ShaderBackground';
 
 const Portfolio: React.FC = () => {
   const { portfolioData } = useAdminData();
@@ -57,24 +59,22 @@ const Portfolio: React.FC = () => {
   const titleWords = portfolioData.title.split(' ');
 
   return (
-    <section id="portfolio" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section id="portfolio" className="relative py-24 bg-blue-night overflow-hidden">
+      <ShaderBackground />
+      {/* Fondu haut/bas pour raccorder aux sections claires */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-night to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-blue-night to-transparent" />
+
+      <div className="relative container mx-auto px-4">
 
         {/* En-tête */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {titleWords.slice(0, -1).join(' ')}{' '}
-            <span className="text-accent">{titleWords.slice(-1)}</span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {portfolioData.subtitle}
-          </p>
-        </motion.div>
+        <SectionTitle
+          dark
+          eyebrow="Nos réalisations"
+          lead={titleWords.slice(0, -1).join(' ')}
+          highlight={titleWords.slice(-1).join('')}
+          subtitle={portfolioData.subtitle}
+        />
 
         {/* ── Coverflow 3D ── */}
         <div
@@ -140,7 +140,7 @@ const Portfolio: React.FC = () => {
 
                 {/* Contour accent sur la carte active */}
                 {isCenter && (
-                  <div className="absolute inset-0 ring-2 ring-accent rounded-2xl pointer-events-none" />
+                  <div className="absolute inset-0 ring-2 ring-orange rounded-2xl pointer-events-none shadow-[0_30px_80px_-20px_rgba(220,88,42,0.55)]" />
                 )}
               </motion.div>
             );
@@ -177,11 +177,11 @@ const Portfolio: React.FC = () => {
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
-            <h3 className="text-2xl font-bold text-primary mb-2">
+            <h3 className="text-2xl font-bold text-white mb-2">
               {currentItem.title}
             </h3>
             {currentItem.description && (
-              <p className="text-gray-500 max-w-lg mx-auto mb-4">
+              <p className="text-gray-300 max-w-lg mx-auto mb-4">
                 {currentItem.description}
               </p>
             )}
@@ -190,7 +190,7 @@ const Portfolio: React.FC = () => {
                 href={currentItem.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-accent hover:opacity-75 font-semibold text-sm transition-opacity"
+                className="inline-flex items-center gap-2 rounded-full border border-orange/60 px-5 py-2 text-orange hover:bg-orange hover:text-white font-semibold text-sm transition-colors duration-300"
               >
                 <ExternalLink size={16} />
                 Visiter le site
@@ -208,8 +208,8 @@ const Portfolio: React.FC = () => {
                 onClick={() => { goTo(i); resetTimer(); }}
                 className={`rounded-full transition-all duration-300 ${
                   i === current
-                    ? 'w-8 h-3 bg-accent'
-                    : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+                    ? 'w-8 h-3 bg-orange'
+                    : 'w-3 h-3 bg-white/30 hover:bg-white/60'
                 }`}
                 aria-label={`Aller au projet ${i + 1}`}
               />
