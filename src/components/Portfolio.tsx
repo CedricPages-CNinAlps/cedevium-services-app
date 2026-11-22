@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 import SectionTitle from '../animations/SectionTitle';
 import ShaderBackground from '../animations/ShaderBackground';
 
 const Portfolio: React.FC = () => {
   const { portfolioData } = useAdminData();
-  const items = portfolioData.items;
+  const items = portfolioData.items.filter(isPublished);
   const [current, setCurrent] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const count = items.length;
@@ -30,7 +30,7 @@ const Portfolio: React.FC = () => {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [resetTimer]);
 
-  if (count === 0) return null;
+  if (count === 0 || !isPublished(portfolioData)) return null;
 
   // Distance relative au slide courant, en tenant compte du wrap circulaire
   const getOffset = (index: number): number => {

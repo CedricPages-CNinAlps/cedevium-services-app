@@ -71,7 +71,9 @@ const PortfolioSection: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <SectionCard title="En-tête de la section Portfolio">
+      <SectionCard title="Section Portfolio (en-tête)" published={local.published}
+        onTogglePublish={() => setLocal((prev: any) => ({ ...prev, published: prev.published === false }))}>
+        <p className="text-xs text-gray-400 mb-3">Le bouton « Publié » masque ou affiche toute la section sur le site.</p>
         <div className="space-y-4">
           <FormField label="Titre" value={local.title} onChange={(v) => updateHeader('title', v)} />
           <FormField label="Sous-titre" value={local.subtitle} onChange={(v) => updateHeader('subtitle', v)} />
@@ -89,7 +91,8 @@ const PortfolioSection: React.FC = () => {
           {local.items.map((item: PortfolioItem, index: number) => (
             <SortableItem key={item.id} id={item.id}>
               {(dragHandle) => (
-        <SectionCard key={item.id} title={`Projet ${index + 1} — ${item.title}`} defaultOpen={index === 0} dragHandle={dragHandle}>
+        <SectionCard key={item.id} title={`Projet ${index + 1} — ${item.title}`} defaultOpen={index === 0} dragHandle={dragHandle}
+          published={(item as any).published} onTogglePublish={() => updateItem(index, 'published' as keyof PortfolioItem, ((item as any).published === false) as any)}>
           <div className="space-y-4">
             <div className="flex justify-end">
               <button type="button" onClick={() => removeItem(index)}

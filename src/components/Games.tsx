@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 import TiltCard from '../animations/TiltCard';
 import SectionTitle from '../animations/SectionTitle';
 
@@ -21,6 +21,8 @@ const Games: React.FC = () => {
     ];
     return colors[index % colors.length];
   };
+
+  if (!isPublished(gamesData)) return null;
 
   return (
     <section id="games" className="relative py-24 bg-white overflow-hidden">
@@ -46,7 +48,7 @@ const Games: React.FC = () => {
               viewport={{ once: true, amount: 0.3 }}
               variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }}
             >
-              {gamesData.benefits.map((benefit, index) => (
+              {gamesData.benefits.filter(isPublished).map((benefit, index) => (
                 <motion.div
                   key={index}
                   className="group flex items-start space-x-3 rounded-xl p-3 transition-colors duration-300 hover:bg-orange/5"
@@ -69,7 +71,7 @@ const Games: React.FC = () => {
         </motion.div>
 
         <div className="flex flex-wrap justify-center gap-6">
-          {gamesData.games.map((game, index) => (
+          {gamesData.games.filter(isPublished).map((game, index) => (
             <motion.div
               key={game.id}
               className="w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] xl:w-[calc(25%-1.125rem)]"

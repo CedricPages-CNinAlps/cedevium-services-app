@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, Variants } from 'framer-motion';
 import { ChevronRight, ArrowRight } from 'lucide-react';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 
 const titleContainer: Variants = {
   hidden: {},
@@ -23,6 +23,7 @@ const fadeUp = (delay: number): Variants => ({
 
 const Hero: React.FC = () => {
   const { heroData, images } = useAdminData();
+  const slides = heroData.slides.filter(isPublished);
   const [currentSlide, setCurrentSlide] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -33,15 +34,16 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroData.slides.length);
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, heroData.slider.autoPlayInterval);
     return () => clearInterval(timer);
-  }, [heroData.slides.length, heroData.slider.autoPlayInterval, currentSlide]);
+  }, [slides.length, heroData.slider.autoPlayInterval, currentSlide]);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroData.slides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroData.slides.length) % heroData.slides.length);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
-  const slide = heroData.slides[currentSlide];
+  const slide = slides[currentSlide] ?? slides[0];
+  if (!slide) return null;
   const titleWords = slide.title.split(' ').filter(Boolean);
 
   return (
@@ -137,7 +139,7 @@ const Hero: React.FC = () => {
         </button>
 
         <div className="flex gap-2">
-          {heroData.slides.map((s, index) => (
+          {slides.map((s, index) => (
             <button
               key={s.id}
               onClick={() => setCurrentSlide(index)}

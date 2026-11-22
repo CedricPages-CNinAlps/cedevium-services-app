@@ -68,7 +68,9 @@ const ActivitiesSection: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <SectionCard title="En-tête de la section">
+      <SectionCard title="Section Activités (en-tête)" published={local.published}
+        onTogglePublish={() => setLocal((prev: any) => ({ ...prev, published: prev.published === false }))}>
+        <p className="text-xs text-gray-400 mb-3">Le bouton « Publié » masque ou affiche toute la section sur le site.</p>
         <div className="space-y-4">
           <FormField label="Titre" value={local.title} onChange={(v) => updateHeader('title', v)} />
           <FormTextarea label="Sous-titre" value={local.subtitle} onChange={(v) => updateHeader('subtitle', v)} />
@@ -83,6 +85,8 @@ const ActivitiesSection: React.FC = () => {
                   title={`Activité ${index + 1} — ${service.title}`}
                   defaultOpen={index === 0}
                   dragHandle={dragHandle}
+                  published={service.published}
+                  onTogglePublish={() => updateService(index, 'published', (service.published === false) as any)}
                 >
                   <div className="space-y-4">
                     <div className="flex justify-end">

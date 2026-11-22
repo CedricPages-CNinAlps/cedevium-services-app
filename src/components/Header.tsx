@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, Code, Briefcase, Home, Mail, Gamepad2 } from 'lucide-react';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 
 const Header: React.FC = () => {
   const { headerData, logoConfig } = useAdminData();
@@ -59,7 +59,7 @@ const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {headerData.navigation.map((item, index) => {
+            {headerData.navigation.filter(isPublished).map((item, index) => {
               const IconComponent = getIconComponent(item.icon);
               return (
                 <motion.a
@@ -98,7 +98,7 @@ const Header: React.FC = () => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {headerData.navigation.map((item, index) => {
+            {headerData.navigation.filter(isPublished).map((item, index) => {
               const IconComponent = getIconComponent(item.icon);
               return (
                 <motion.a

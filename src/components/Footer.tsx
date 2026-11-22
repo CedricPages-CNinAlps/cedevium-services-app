@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 
 const Footer: React.FC = () => {
   const { footerData, logoConfig, openAdmin } = useAdminData();
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
           >
             <h3 className={`text-lg font-semibold mb-4 text-accent`}>{footerData.quickLinks.title}</h3>
             <ul className="space-y-2">
-              {footerData.quickLinks.links.map((link, index) => (
+              {footerData.quickLinks.links.filter(isPublished).map((link, index) => (
                 <li key={index}>
                   <a href={link.href} className="link-underline text-gray-300 hover:text-orange transition-colors">
                     {link.name}

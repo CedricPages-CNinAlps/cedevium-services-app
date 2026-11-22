@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
-import { FormField, FormTextarea, SectionCard, SaveButton } from '../AdminComponents';
+import { FormField, FormTextarea, SectionCard, SaveButton, PublishToggle } from '../AdminComponents';
 import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 
 const NAV_ICON_OPTIONS = ['Home', 'Briefcase', 'Code', 'Gamepad2', 'Mail', 'Globe', 'Info', 'Star', 'Phone'];
@@ -131,6 +131,9 @@ const NavigationSection: React.FC = () => {
                         </div>
                         <FormField label="Ancre (href)" value={item.href} onChange={(v) => updateNavItem(index, 'href', v)} placeholder="#section" />
                       </div>
+                      <div className="mt-7 flex-shrink-0">
+                        <PublishToggle published={(item as any).published} onToggle={() => updateNavItem(index, 'published', ((item as any).published === false) as any)} />
+                      </div>
                       <button type="button" onClick={() => removeNavItem(index)}
                         className="mt-6 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0">
                         <Trash2 size={15} />
@@ -175,6 +178,9 @@ const NavigationSection: React.FC = () => {
                       <div className="flex-1 grid grid-cols-2 gap-2">
                         <FormField label="Libellé" value={link.name} onChange={(v) => updateFooterLink(index, 'name', v)} />
                         <FormField label="Ancre (href)" value={link.href} onChange={(v) => updateFooterLink(index, 'href', v)} />
+                      </div>
+                      <div className="mb-1.5 flex-shrink-0">
+                        <PublishToggle published={(link as any).published} onToggle={() => updateFooterLink(index, 'published', ((link as any).published === false) as any)} />
                       </div>
                       <button type="button" onClick={() => removeFooterLink(index)}
                         className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors mb-0.5">

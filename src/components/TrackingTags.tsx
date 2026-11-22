@@ -4,6 +4,7 @@ import { useAdminData } from '../contexts/AdminDataContext';
 declare global {
   interface Window {
     tarteaucitron: any;
+    dataLayer: unknown[];
   }
 }
 
@@ -80,8 +81,27 @@ const TrackingTags: React.FC = () => {
 
       if (config.googleTagId) {
         if (config.googleTagId.startsWith('GTM-')) {
-          tac.user.googletagmanagerId = config.googleTagId;
-          (tac.job = tac.job || []).push('googletagmanager');
+          // Own key: the built-in 'googletagmanager' service is typed 'api' and would be listed under "APIs" instead of "Mesure d'audience".
+          const gtmId = config.googleTagId;
+          const loadGtm = () => {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            tac.addScript('https://www.googletagmanager.com/gtm.js?id=' + gtmId);
+          };
+          tac.services.gtmaudience = {
+            key: 'gtmaudience',
+            type: 'analytic',
+            name: 'Google Tag Manager',
+            uri: 'https://policies.google.com/privacy',
+            needConsent: true,
+            cookies: ['_ga', '_gat', '_gid', '__utma', '__utmb', '__utmc', '__utmt', '__utmz'],
+            js: loadGtm,
+            // Same as the built-in service: with Consent Mode (not soft), GTM loads with consent "denied" by default.
+            fallback: () => {
+              if (tac.parameters.googleConsentMode === true && tac.parameters.softConsentMode === false) loadGtm();
+            },
+          };
+          (tac.job = tac.job || []).push('gtmaudience');
         } else {
           tac.user.gtagUa = config.googleTagId;
           (tac.job = tac.job || []).push('gtag');

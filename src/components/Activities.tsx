@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Cpu, Users, Palette } from 'lucide-react';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 import SectionTitle from '../animations/SectionTitle';
 import TiltCard from '../animations/TiltCard';
 
@@ -17,6 +17,8 @@ const Activities: React.FC = () => {
     }
   };
 
+  if (!isPublished(servicesData)) return null;
+
   return (
     <section id="activities" className="relative py-24 bg-gray-50 overflow-hidden">
       {/* Formes décoratives floues */}
@@ -26,8 +28,8 @@ const Activities: React.FC = () => {
       <div className="relative container mx-auto px-4">
         <SectionTitle eyebrow="Ce que nous faisons" lead="Nos" highlight="Activités" subtitle={servicesData.subtitle} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {servicesData.services.map((service, index) => {
+        <div className="flex flex-wrap justify-center gap-8">
+          {servicesData.services.filter(isPublished).map((service, index) => {
             const IconComponent = getIconComponent(service.icon);
             return (
               <motion.div
@@ -36,6 +38,7 @@ const Activities: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)]"
               >
                 <TiltCard
                   className="group h-full"

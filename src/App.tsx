@@ -18,7 +18,7 @@ import { AdminDataProvider, useAdminData } from './contexts/AdminDataContext';
 
 
 function AppContent() {
-  const { logoConfig } = useAdminData();
+  const { logoConfig, remoteLoaded } = useAdminData();
 
   useEffect(() => {
     if (logoConfig.favicon) {
@@ -30,6 +30,9 @@ function AppContent() {
       if (link) link.href = logoConfig.appleTouchIcon;
     }
   }, [logoConfig.favicon, logoConfig.appleTouchIcon]);
+
+  // Attendre les données publiées : sinon le logo et le menu par défaut s'affichent puis sautent
+  if (!remoteLoaded) return <div className="min-h-screen bg-blue-night" aria-busy="true" />;
   const pageSlug = new URLSearchParams(window.location.search).get('page');
 
   if (pageSlug) {

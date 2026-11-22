@@ -28,6 +28,13 @@ const HeroSection: React.FC = () => {
     }));
   };
 
+  const toggleSlide = (index: number) => {
+    setLocal((prev: typeof heroData) => ({
+      ...prev,
+      slides: prev.slides.map((s: any, i: number) => i === index ? { ...s, published: s.published === false } : s),
+    }));
+  };
+
   const removeSlide = (index: number) => {
     if (local.slides.length <= 1) return;
     setLocal((prev: typeof heroData) => ({
@@ -60,7 +67,8 @@ const HeroSection: React.FC = () => {
       </SectionCard>
 
       {local.slides.map((slide: typeof heroData.slides[0], index: number) => (
-        <SectionCard key={slide.id} title={`Slide ${index + 1} — ${slide.title}`} defaultOpen={index === 0}>
+        <SectionCard key={slide.id} title={`Slide ${index + 1} — ${slide.title}`} defaultOpen={index === 0}
+          published={(slide as any).published} onTogglePublish={() => toggleSlide(index)}>
           <div className="space-y-4">
             <div className="flex justify-end">
               <button

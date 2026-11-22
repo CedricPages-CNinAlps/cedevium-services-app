@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { useAdminData } from '../../contexts/AdminDataContext';
-import { FormField, FormTextarea, FormSelect, SectionCard, SaveButton } from '../AdminComponents';
+import { FormField, FormTextarea, FormSelect, SectionCard, SaveButton, PublishToggle } from '../AdminComponents';
 import { SortableItem, DragSortContext, DragEndEvent, arrayMove } from '../SortableItem';
 import EmojiPicker from '../components/EmojiPicker';
 
@@ -80,7 +80,9 @@ const GamesSection: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <SectionCard title="En-tête de la section">
+      <SectionCard title="Section Jeux (en-tête)" published={local.published}
+        onTogglePublish={() => setLocal((prev: any) => ({ ...prev, published: prev.published === false }))}>
+        <p className="text-xs text-gray-400 mb-3">Le bouton « Publié » masque ou affiche toute la section sur le site.</p>
         <div className="space-y-4">
           <FormField
             label="Titre"
@@ -101,12 +103,14 @@ const GamesSection: React.FC = () => {
           {local.games.map((game: typeof gamesData.games[0], index: number) => (
             <SortableItem key={String(game.id)} id={String(game.id)}>
               {(dragHandle) => (
-            <div className="border border-gray-200 rounded-xl p-4">
+            <div className={`border border-gray-200 rounded-xl p-4 ${(game as any).published === false ? 'opacity-70 border-dashed' : ''}`}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   {dragHandle}
                   <span className="font-medium text-gray-800 text-sm">{game.emoji} {game.name}</span>
                 </div>
+                <div className="flex items-center gap-1">
+                <PublishToggle published={(game as any).published} onToggle={() => updateGame(index, 'published', ((game as any).published === false) as any)} />
                 <button
                   type="button"
                   onClick={() => removeGame(index)}
@@ -114,6 +118,7 @@ const GamesSection: React.FC = () => {
                 >
                   <Trash2 size={15} />
                 </button>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <FormField
@@ -175,6 +180,9 @@ const GamesSection: React.FC = () => {
         <div className="space-y-4">
           {local.benefits.map((benefit: typeof gamesData.benefits[0], index: number) => (
             <div key={index} className="space-y-2 border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+              <div className="flex justify-end">
+                <PublishToggle published={(benefit as any).published} onToggle={() => updateBenefit(index, 'published', ((benefit as any).published === false) as any)} />
+              </div>
               <FormField
                 label={`Titre avantage ${index + 1}`}
                 value={benefit.title}

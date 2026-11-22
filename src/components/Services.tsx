@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Briefcase, Palette, Network, ArrowRight, MessageCircle } from 'lucide-react';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 import SectionTitle from '../animations/SectionTitle';
 import { scrollToElement } from '../animations/motion';
 
@@ -33,13 +33,15 @@ const Services: React.FC = () => {
     if (section) scrollToElement(section);
   };
 
+  if (!isPublished(activitiesData)) return null;
+
   return (
     <section id="services" className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <SectionTitle eyebrow="Notre expertise" lead="Nos" highlight="Services" subtitle={activitiesData.subtitle} />
 
         <div className="space-y-16">
-          {activitiesData.activities.map((activity, index) => {
+          {activitiesData.activities.filter(isPublished).map((activity, index) => {
             const IconComponent = getIconComponent(activity.icon);
             const image = (activity as any).image as string | undefined;
             const showIcon = (activity as any).showIcon !== false;

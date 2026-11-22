@@ -1,5 +1,29 @@
 import React from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Eye, EyeOff } from 'lucide-react';
+
+interface PublishToggleProps {
+  published?: boolean;
+  onToggle: () => void;
+}
+
+/** Bouton Publié / Brouillon : un bloc en brouillon est conservé mais masqué sur le site. */
+export const PublishToggle: React.FC<PublishToggleProps> = ({ published, onToggle }) => {
+  const isOn = published !== false;
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={isOn}
+      title={isOn ? 'Visible sur le site — cliquer pour repasser en brouillon' : 'Brouillon (masqué) — cliquer pour publier'}
+      className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 transition-colors ${
+        isOn ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+      }`}
+    >
+      {isOn ? <Eye size={13} /> : <EyeOff size={13} />}
+      {isOn ? 'Publié' : 'Publier'}
+    </button>
+  );
+};
 
 interface FormFieldProps {
   label: string;
@@ -150,13 +174,16 @@ interface SectionCardProps {
   defaultOpen?: boolean;
   /** Nœud React placé à gauche du titre — utilisé pour la poignée DnD */
   dragHandle?: React.ReactNode;
+  /** Si fourni, affiche le bouton Publié / Brouillon dans l'en-tête */
+  published?: boolean;
+  onTogglePublish?: () => void;
 }
 
-export const SectionCard: React.FC<SectionCardProps> = ({ title, children, defaultOpen = true, dragHandle }) => {
+export const SectionCard: React.FC<SectionCardProps> = ({ title, children, defaultOpen = true, dragHandle, published, onTogglePublish }) => {
   const [open, setOpen] = React.useState(defaultOpen);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-4">
+    <div className={`bg-white rounded-xl border border-gray-200 overflow-hidden mb-4 ${onTogglePublish && published === false ? 'opacity-70 border-dashed' : ''}`}>
       <div className="flex items-stretch">
         {dragHandle && (
           <div className="flex items-center justify-center px-2 border-r border-gray-100 bg-gray-50 flex-shrink-0">
@@ -171,6 +198,11 @@ export const SectionCard: React.FC<SectionCardProps> = ({ title, children, defau
           <span className="font-semibold text-[#1E1A34] truncate">{title}</span>
           <span className="text-gray-400 text-lg ml-2 flex-shrink-0">{open ? '▲' : '▼'}</span>
         </button>
+        {onTogglePublish && (
+          <div className="flex items-center pr-4">
+            <PublishToggle published={published} onToggle={onTogglePublish} />
+          </div>
+        )}
       </div>
       {open && (
         <div className="px-6 pb-6 pt-2 border-t border-gray-100">

@@ -62,6 +62,9 @@ export interface LogoConfig {
   appleTouchIcon: string;
 }
 
+// Un bloc est visible tant qu'il n'est pas explicitement passé en brouillon (published: false)
+export const isPublished = <T,>(block: T): boolean => (block as { published?: boolean })?.published !== false;
+
 // ── Default values ──────────────────────────────────────────────────────────
 
 const defaultPortfolioConfig: PortfolioData = defaultPortfolioData;
@@ -286,7 +289,10 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       saveToJsonBin(data);
       setRemoteLoaded(true);
     } else {
+      // Filet de sécurité : si JSONBin est lent, on affiche le site après 3 s
+      const fallback = setTimeout(() => setRemoteLoaded(true), 3000);
       loadFromJsonBin().then(remote => {
+        clearTimeout(fallback);
         if (remote) setData(remote);
         setRemoteLoaded(true);
       });

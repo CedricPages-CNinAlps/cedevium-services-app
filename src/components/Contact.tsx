@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import { useAdminData } from '../contexts/AdminDataContext';
+import { useAdminData, isPublished } from '../contexts/AdminDataContext';
 import SectionTitle from '../animations/SectionTitle';
 
 const Contact: React.FC = () => {
@@ -158,6 +158,8 @@ const Contact: React.FC = () => {
       </section>
     );
   }
+
+  if (!isPublished(contactData)) return null;
 
   return (
     <section id="contact" className="relative py-24 pb-32 bg-gray-50 overflow-hidden">
@@ -327,7 +329,7 @@ const Contact: React.FC = () => {
               <h3 className={`text-2xl font-bold mb-6 text-primary`}>{contactData.info.title}</h3>
               
               <div className="space-y-6">
-                {contactData.info.items.map((info, index) => {
+                {contactData.info.items.filter(isPublished).map((info, index) => {
                   const IconComponent = getIconComponent(info.icon);
                   return (
                     <motion.a

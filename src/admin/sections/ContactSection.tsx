@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAdminData } from '../../contexts/AdminDataContext';
-import { FormField, FormTextarea, StringListEditor, SectionCard, SaveButton } from '../AdminComponents';
+import { FormField, FormTextarea, StringListEditor, SectionCard, SaveButton, PublishToggle } from '../AdminComponents';
 
 const ContactSection: React.FC = () => {
   const { contactData, updateContactData } = useAdminData();
@@ -39,7 +39,9 @@ const ContactSection: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <SectionCard title="En-tête de la section">
+      <SectionCard title="Section Contact (en-tête)" published={local.published}
+        onTogglePublish={() => setLocal((prev: any) => ({ ...prev, published: prev.published === false }))}>
+        <p className="text-xs text-gray-400 mb-3">Le bouton « Publié » masque ou affiche toute la section sur le site.</p>
         <div className="space-y-4">
           <FormField
             label="Titre"
@@ -58,7 +60,10 @@ const ContactSection: React.FC = () => {
         <div className="space-y-6">
           {local.info.items.map((item: typeof contactData.info.items[0], index: number) => (
             <div key={index} className="space-y-3 border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{item.type}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{item.type}</p>
+                <PublishToggle published={(item as any).published} onToggle={() => updateContactItem(index, 'published', ((item as any).published === false) as any)} />
+              </div>
               <FormField
                 label="Titre affiché"
                 value={item.title}
